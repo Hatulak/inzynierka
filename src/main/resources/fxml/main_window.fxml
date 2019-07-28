@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="628.0" prefWidth="827.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
-
+    <children>
+        <MenuBar layoutY="2.0" prefHeight="22.0" prefWidth="827.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="%menubar.file">
+                    <items>
+                        <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false" text="%menubar.new.experiment"/>
+                        <MenuItem fx:id="menuItemClose" mnemonicParsing="false" text="%menubar.close"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <Label layoutX="49.0" layoutY="27.0" prefHeight="48.0" prefWidth="283.0" text="%main.window.experiments.list">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
+        <ScrollPane layoutX="49.0" layoutY="75.0" prefHeight="553.0" prefWidth="721.0">
+            <content>
+                <TableView fx:id="tableExperiments" prefHeight="551.0" prefWidth="719.0">
+                    <columns>
+                        <TableColumn fx:id="tableColumnExperimentName" prefWidth="223.0" text="%experiment.name"/>
+                        <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="116.0"
+                                     text="%experiment.status"/>
+                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="93.0" text="%experiment.action"/>
+                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="108.0" text="%experiment.results"/>
+                    </columns>
+                </TableView>
+            </content>
+        </ScrollPane>
+    </children>
 </AnchorPane>
