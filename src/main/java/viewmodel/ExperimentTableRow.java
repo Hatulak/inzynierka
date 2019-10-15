@@ -1,4 +1,4 @@
-package model;
+package viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 
