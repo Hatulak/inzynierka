@@ -51,7 +51,7 @@
                                 <Label layoutX="14.0" layoutY="77.0" prefHeight="17.0" prefWidth="138.0"
                                        text="%new.experiment.mri.simulation.object.file"/>
                                 <TextField fx:id="newExperimentMRIMethodTextField" layoutX="162.0" layoutY="165.0"/>
-                                <Button fx:id="newExperimentMRIObjectFileDescButton" layoutX="162.0" layoutY="73.0"
+                                <Button layoutX="162.0" layoutY="73.0"
                                         mnemonicParsing="false" onAction="#loadMRIObjectFileDesc"
                                         text="%new.experiment.mri.simulation.object.file.open.desc"/>
                                 <Line endX="191.0" layoutX="127.0" layoutY="123.0" startX="-112.0"/>
@@ -75,10 +75,10 @@
                                 <TextField fx:id="newExperimentTETextField" layoutX="162.0" layoutY="263.0"/>
                                 <TextField fx:id="newExperimentACQTimeTextField" layoutX="162.0" layoutY="301.0"/>
                                 <TextField fx:id="newExperimentFATextField" layoutX="162.0" layoutY="335.0"/>
-                                <Button fx:id="newExperimentMRIObjectFileFlowButton" layoutX="283.0" layoutY="73.0"
+                                <Button layoutX="283.0" layoutY="73.0"
                                         mnemonicParsing="false" onAction="#loadMRIObjectFileFlow"
                                         text="%new.experiment.mri.simulation.object.file.open.flow"/>
-                                <Button fx:id="newExperimentMRIObjectFileTypeButton" layoutX="404.0" layoutY="73.0"
+                                <Button layoutX="404.0" layoutY="73.0"
                                         mnemonicParsing="false" onAction="#loadMRIObjectFileType"
                                         text="%new.experiment.mri.simulation.object.file.open.type"/>
                                 <Label fx:id="descFileLabel" layoutX="162.0" layoutY="106.0" prefHeight="17.0"
@@ -176,7 +176,34 @@
                                            layoutY="409.0"/>
                                 <Label layoutX="14.0" layoutY="257.0" prefHeight="17.0" prefWidth="192.0"
                                        text="%new.experiment.mri.simulation.sequence.flow.compensation"/>
-
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%new.experiment.mri.results">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="30.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.kspace.re.txt"/>
+                                <CheckBox fx:id="newExperimentWriteKspaceReTxtCheckBox" layoutX="206.0" layoutY="30.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="68.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.kspace.im.txt"/>
+                                <CheckBox fx:id="newExperimentWriteKspaceImTxtCheckBox" layoutX="206.0" layoutY="68.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="105.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.amp.txt"/>
+                                <CheckBox fx:id="newExperimentWriteImageAmpTxtCheckBox" layoutX="206.0" layoutY="105.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="146.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.amp.bmp"/>
+                                <CheckBox fx:id="newExperimentWriteImageAmpBmpCheckBox" layoutX="206.0" layoutY="146.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="186.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.phase.bmp"/>
+                                <CheckBox fx:id="newExperimentWriteImagePhaseBmpCheckBox" layoutX="206.0"
+                                          layoutY="186.0" mnemonicParsing="false"/>
                             </children>
                         </AnchorPane>
                     </content>

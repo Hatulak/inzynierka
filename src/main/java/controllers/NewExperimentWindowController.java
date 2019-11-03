@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -31,6 +32,16 @@ public class NewExperimentWindowController {
     public Label flowFileLabel;
     @FXML
     public Label typeFileLabel;
+    @FXML
+    public CheckBox newExperimentWriteKspaceImTxtCheckBox;
+    @FXML
+    public CheckBox newExperimentWriteKspaceReTxtCheckBox;
+    @FXML
+    public CheckBox newExperimentWriteImageAmpTxtCheckBox;
+    @FXML
+    public CheckBox newExperimentWriteImageAmpBmpCheckBox;
+    @FXML
+    public CheckBox newExperimentWriteImagePhaseBmpCheckBox;
     @FXML
     private TextField newExperimentNumberOfTreesTextField;
     @FXML
@@ -168,13 +179,12 @@ public class NewExperimentWindowController {
     @FXML
     void loadDefaultData(ActionEvent event) {
         ResourceBundle defaultParametersValues = ResourceBundle.getBundle("bundles.default_parameters");
-        ResourceBundle textFields = ResourceBundle.getBundle("bundles.parameters_into_textfields");
 
         List<String> experimentParameters = getExperimentParametersFromBundle();
 
         experimentParameters.forEach(eP -> {
             try {
-                setParameterIntoTextField(eP, defaultParametersValues.getString(eP));
+                setParameter(eP, defaultParametersValues.getString(eP));
             } catch (MissingResourceException e) {
                 log.warn("While loading default data: " + e.getMessage());
             }
@@ -201,7 +211,7 @@ public class NewExperimentWindowController {
                     String[] split = line.split("\\s");
                     if (split[0].matches(experimentParameter)) {
                         //znaczy że nie zakomentowane -> bierzemy
-                        setParameterIntoTextField(experimentParameter, split[split.length - 1]);
+                        setParameter(experimentParameter, split[split.length - 1]);
                     }
                 }
             }
@@ -212,65 +222,75 @@ public class NewExperimentWindowController {
         }
     }
 
-    private void setParameterIntoTextField(String experimentParameter, String value) {
+    private void setParameter(String experimentParameter, String value) {
         log.debug("Setting experiment parameter( " + experimentParameter + " )  with value ( " + value + " )");
-        ResourceBundle textFields = ResourceBundle.getBundle("bundles.parameters_into_textfields");
+        ResourceBundle fields = ResourceBundle.getBundle("bundles.parameters_into_fields");
 
         Class<NewExperimentWindowController> myClass = NewExperimentWindowController.class;
-        try {
-            Field field = myClass.getDeclaredField(textFields.getString(experimentParameter));
-            TextField textField = (TextField) field.get(this);
-            textField.setText(value);
-        } catch (NoSuchFieldException e) {
-            if (experimentParameter.matches("MRI_OBJECT_FILE")) {
-                log.debug("In catch - MRI_OBJECT_FILE setting");
-                //nie ma tekiego fielda bo tutaj dajemy pliki
-                ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
+        if (fields.getString(experimentParameter).contains("TextField")) {
+            try {
+                Field field = myClass.getDeclaredField(fields.getString(experimentParameter));
+                TextField textField = (TextField) field.get(this);
+                textField.setText(value);
+            } catch (NoSuchFieldException e) {
+                if (experimentParameter.matches("MRI_OBJECT_FILE")) {
+                    log.debug("In catch - MRI_OBJECT_FILE setting");
+                    //nie ma tekiego fielda bo tutaj dajemy pliki
+                    ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
 
-                String descFilePath = value + DESC_TXT;
-                String flowFilePath = value + FLOW_TXT;
-                String typeFilePath = value + TYPE_TXT;
+                    String descFilePath = value + DESC_TXT;
+                    String flowFilePath = value + FLOW_TXT;
+                    String typeFilePath = value + TYPE_TXT;
 
-                File descFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(descFilePath).getFileName());
-                if (!descFile.exists()) {
-                    descFileLabel.setText(messages.getString("desc.file.label.error"));
-                    descFileLabel.setTextFill(Color.RED);
+                    File descFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(descFilePath).getFileName());
+                    if (!descFile.exists()) {
+                        descFileLabel.setText(messages.getString("desc.file.label.error"));
+                        descFileLabel.setTextFill(Color.RED);
+                    } else {
+                        mriObjectFileDesc = descFile;
+                        descFileLabel.setText(messages.getString("desc.file.label.fine"));
+                        descFileLabel.setTextFill(Color.BLACK);
+                    }
+                    File flowFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(flowFilePath).getFileName());
+                    if (!flowFile.exists()) {
+                        flowFileLabel.setText(messages.getString("desc.file.label.error"));
+                        flowFileLabel.setTextFill(Color.RED);
+                    } else {
+                        mriObjectFileFlow = flowFile;
+                        flowFileLabel.setText(messages.getString("desc.file.label.fine"));
+                        flowFileLabel.setTextFill(Color.BLACK);
+                    }
+                    File typeFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(typeFilePath).getFileName());
+                    if (!typeFile.exists()) {
+                        typeFileLabel.setText(messages.getString("desc.file.label.error"));
+                        typeFileLabel.setTextFill(Color.RED);
+                    } else {
+                        mriObjectFileType = typeFile;
+                        typeFileLabel.setText(messages.getString("desc.file.label.fine"));
+                        typeFileLabel.setTextFill(Color.BLACK);
+                    }
                 } else {
-                    mriObjectFileDesc = descFile;
-                    descFileLabel.setText(messages.getString("desc.file.label.fine"));
-                    descFileLabel.setTextFill(Color.BLACK);
+                    //todo - dać info że nie ma tekiego fielda
+                    log.warn(e.getMessage());
                 }
-                File flowFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(flowFilePath).getFileName());
-                if (!flowFile.exists()) {
-                    flowFileLabel.setText(messages.getString("desc.file.label.error"));
-                    flowFileLabel.setTextFill(Color.RED);
-                } else {
-                    mriObjectFileFlow = flowFile;
-                    flowFileLabel.setText(messages.getString("desc.file.label.fine"));
-                    flowFileLabel.setTextFill(Color.BLACK);
-                }
-                File typeFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(typeFilePath).getFileName());
-                if (!typeFile.exists()) {
-                    typeFileLabel.setText(messages.getString("desc.file.label.error"));
-                    typeFileLabel.setTextFill(Color.RED);
-                } else {
-                    mriObjectFileType = typeFile;
-                    typeFileLabel.setText(messages.getString("desc.file.label.fine"));
-                    typeFileLabel.setTextFill(Color.BLACK);
-                }
-            } else {
-                //todo - dać info że nie ma tekiego fielda
+            } catch (IllegalAccessException e) {
                 log.warn(e.getMessage());
             }
-        } catch (IllegalAccessException e) {
-            log.warn(e.getMessage());
+        } else if (fields.getString(experimentParameter).contains("CheckBox")) {
+            try {
+                Field field = myClass.getDeclaredField(fields.getString(experimentParameter));
+                CheckBox checkBox = (CheckBox) field.get(this);
+                checkBox.setSelected(value.matches("1"));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
     @FXML
     void saveNewExperiment(ActionEvent event) {
-        //Todo
+
     }
 
     private List<String> getExperimentParametersFromBundle() {
