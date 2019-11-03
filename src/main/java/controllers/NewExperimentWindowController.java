@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Slf4j
 public class NewExperimentWindowController {
@@ -170,7 +167,18 @@ public class NewExperimentWindowController {
 
     @FXML
     void loadDefaultData(ActionEvent event) {
-        //Todo
+        ResourceBundle defaultParametersValues = ResourceBundle.getBundle("bundles.default_parameters");
+        ResourceBundle textFields = ResourceBundle.getBundle("bundles.parameters_into_textfields");
+
+        List<String> experimentParameters = getExperimentParametersFromBundle();
+
+        experimentParameters.forEach(eP -> {
+            try {
+                setParameterIntoTextField(eP, defaultParametersValues.getString(eP));
+            } catch (MissingResourceException e) {
+                log.warn("While loading default data: " + e.getMessage());
+            }
+        });
     }
 
     @FXML
@@ -199,6 +207,7 @@ public class NewExperimentWindowController {
             }
         } catch (IOException e) {
             //Todo - pokazać jakiś message że błąd z plikiem
+            log.error("Problem with file: " + fileWithOptions.getPath());
             e.printStackTrace();
         }
     }
@@ -251,12 +260,10 @@ public class NewExperimentWindowController {
                 }
             } else {
                 //todo - dać info że nie ma tekiego fielda
-                log.error(e.getMessage());
-                e.printStackTrace();
+                log.warn(e.getMessage());
             }
         } catch (IllegalAccessException e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+            log.warn(e.getMessage());
         }
 
     }
