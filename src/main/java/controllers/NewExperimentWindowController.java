@@ -3,7 +3,9 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,18 @@ import java.util.ResourceBundle;
 
 @Slf4j
 public class NewExperimentWindowController {
+
+    public static final String DESC_TXT = "_desc.txt";
+    public static final String FLOW_TXT = "_flow.txt";
+    public static final String TYPE_TXT = "_type.txt";
+
+
+    @FXML
+    public Label descFileLabel;
+    @FXML
+    public Label flowFileLabel;
+    @FXML
+    public Label typeFileLabel;
     @FXML
     private TextField newExperimentNumberOfTreesTextField;
     @FXML
@@ -97,6 +111,7 @@ public class NewExperimentWindowController {
     @FXML
     private Button newExperimentReadFileWithOptionsButton;
 
+    private File fileWithOptions;
     private File mriObjectFileDesc;
     private File mriObjectFileFlow;
     private File mriObjectFileType;
@@ -104,26 +119,47 @@ public class NewExperimentWindowController {
 
     @FXML
     public void loadMRIObjectFileDesc(ActionEvent actionEvent) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("bundles.messages");
+        ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(resourceBundle.getString("new.experiment.mri.simulation.object.file.open.title"));
+        fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
         mriObjectFileDesc = fileChooser.showOpenDialog(null);
+        if (!mriObjectFileDesc.exists()) {
+            descFileLabel.setText(messages.getString("desc.file.label.error"));
+            descFileLabel.setTextFill(Color.RED);
+        } else {
+            descFileLabel.setText(messages.getString("desc.file.label.fine"));
+            descFileLabel.setTextFill(Color.BLACK);
+        }
     }
 
     @FXML
     public void loadMRIObjectFileFlow(ActionEvent actionEvent) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("bundles.messages");
+        ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(resourceBundle.getString("new.experiment.mri.simulation.object.file.open.title"));
+        fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
         mriObjectFileFlow = fileChooser.showOpenDialog(null);
+        if (!mriObjectFileFlow.exists()) {
+            flowFileLabel.setText(messages.getString("desc.file.label.error"));
+            flowFileLabel.setTextFill(Color.RED);
+        } else {
+            flowFileLabel.setText(messages.getString("desc.file.label.fine"));
+            flowFileLabel.setTextFill(Color.BLACK);
+        }
     }
 
     @FXML
     public void loadMRIObjectFileType(ActionEvent actionEvent) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("bundles.messages");
+        ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(resourceBundle.getString("new.experiment.mri.simulation.object.file.open.title"));
-        mriObjectFileFlow = fileChooser.showOpenDialog(null);
+        fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
+        mriObjectFileType = fileChooser.showOpenDialog(null);
+        if (!mriObjectFileType.exists()) {
+            typeFileLabel.setText(messages.getString("desc.file.label.error"));
+            typeFileLabel.setTextFill(Color.RED);
+        } else {
+            typeFileLabel.setText(messages.getString("desc.file.label.fine"));
+            typeFileLabel.setTextFill(Color.BLACK);
+        }
     }
 
     @FXML
@@ -141,12 +177,12 @@ public class NewExperimentWindowController {
     void readFileWithOptions(ActionEvent event) {
         ResourceBundle messagesBundle = ResourceBundle.getBundle("bundles.messages");
         //fixme - powrócić do filechoosera jak na testowym pliku bedzie git
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle(messagesBundle.getString("new.experiment.load.file.with.options"));
-//        File fileWithOptions = fileChooser.showOpenDialog(null);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(messagesBundle.getString("new.experiment.load.file.with.options"));
+        fileWithOptions = fileChooser.showOpenDialog(null);
+//        fileWithOptions = new File(String.valueOf(Paths.get("E:\\Repozytoria\\inzynierka\\inout\\in\\ISBI2012\\addEllipse\\optionsMRI_addEllipse.txt"))); //a to usunąć
         try {
-//            List<String> fileLines = Files.readAllLines(Paths.get(fileWithOptions.getPath()));
-            List<String> fileLines = Files.readAllLines(Paths.get("E:\\Repozytoria\\inzynierka\\inout\\in\\ISBI2012\\addEllipse\\optionsMRI_addEllipse.txt")); //a to usunąć
+            List<String> fileLines = Files.readAllLines(Paths.get(fileWithOptions.getPath()));
             List<String> experimentParameters = getExperimentParametersFromBundle();
             for (String line : fileLines) {
                 if (line.split("#").length == 0) continue;
@@ -169,7 +205,6 @@ public class NewExperimentWindowController {
 
     private void setParameterIntoTextField(String experimentParameter, String value) {
         log.debug("Setting experiment parameter( " + experimentParameter + " )  with value ( " + value + " )");
-
         ResourceBundle textFields = ResourceBundle.getBundle("bundles.parameters_into_textfields");
 
         Class<NewExperimentWindowController> myClass = NewExperimentWindowController.class;
@@ -179,13 +214,48 @@ public class NewExperimentWindowController {
             textField.setText(value);
         } catch (NoSuchFieldException e) {
             if (experimentParameter.matches("MRI_OBJECT_FILE")) {
+                log.debug("In catch - MRI_OBJECT_FILE setting");
                 //nie ma tekiego fielda bo tutaj dajemy pliki
-                //todo
+                ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
+
+                String descFilePath = value + DESC_TXT;
+                String flowFilePath = value + FLOW_TXT;
+                String typeFilePath = value + TYPE_TXT;
+
+                File descFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(descFilePath).getFileName());
+                if (!descFile.exists()) {
+                    descFileLabel.setText(messages.getString("desc.file.label.error"));
+                    descFileLabel.setTextFill(Color.RED);
+                } else {
+                    mriObjectFileDesc = descFile;
+                    descFileLabel.setText(messages.getString("desc.file.label.fine"));
+                    descFileLabel.setTextFill(Color.BLACK);
+                }
+                File flowFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(flowFilePath).getFileName());
+                if (!flowFile.exists()) {
+                    flowFileLabel.setText(messages.getString("desc.file.label.error"));
+                    flowFileLabel.setTextFill(Color.RED);
+                } else {
+                    mriObjectFileFlow = flowFile;
+                    flowFileLabel.setText(messages.getString("desc.file.label.fine"));
+                    flowFileLabel.setTextFill(Color.BLACK);
+                }
+                File typeFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(typeFilePath).getFileName());
+                if (!typeFile.exists()) {
+                    typeFileLabel.setText(messages.getString("desc.file.label.error"));
+                    typeFileLabel.setTextFill(Color.RED);
+                } else {
+                    mriObjectFileType = typeFile;
+                    typeFileLabel.setText(messages.getString("desc.file.label.fine"));
+                    typeFileLabel.setTextFill(Color.BLACK);
+                }
             } else {
                 //todo - dać info że nie ma tekiego fielda
+                log.error(e.getMessage());
                 e.printStackTrace();
             }
         } catch (IllegalAccessException e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
 
