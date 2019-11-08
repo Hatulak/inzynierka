@@ -1,17 +1,15 @@
 package database;
 
 import database.model.Experiment;
-import database.utils.EMFProvider;
+import database.utils.EMProvider;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 class DatabaseTests {
     @Test
     void saveTest() {
-        EntityManagerFactory factory = EMFProvider.getEntityManagerFactory();
-        EntityManager em = factory.createEntityManager();
+        EntityManager em = EMProvider.getEntityManager();
         Experiment experiment = Experiment.builder()
                 .name("test")
                 .optionsFilePath("testPath")
