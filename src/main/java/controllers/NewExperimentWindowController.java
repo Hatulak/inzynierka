@@ -1,6 +1,7 @@
 package controllers;
 
 import database.model.Experiment;
+import database.model.Status;
 import database.repository.ExperimentRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -123,10 +124,13 @@ public class NewExperimentWindowController {
     @FXML
     private Button newExperimentReadFileWithOptionsButton;
 
+    private MainWindowController mainWindowController;
+
     private File fileWithOptions;
     private File readedMriObjectFileDesc;
     private File readedMriObjectFileFlow;
     private File readedMriObjectFileType;
+
 
 
     @FXML
@@ -228,21 +232,25 @@ public class NewExperimentWindowController {
 
     @FXML
     void saveNewExperiment(ActionEvent event) {
-        validateFields();
-        Experiment experiment = Experiment.builder()
-                .name(newExperimentNameTextField.getText())
-                .build();
-        Experiment savedExperiment = ExperimentRepository.save(experiment);
+        if (validateFields()) {
+            Experiment experiment = Experiment.builder()
+                    .name(newExperimentNameTextField.getText())
+                    .status(Status.CREATED)
+                    .build();
+            Experiment savedExperiment = ExperimentRepository.save(experiment);
 
-        savedExperiment.setOptionsFilePath(createOptionsFile(savedExperiment.getId()));
-        savedExperiment.setDescFilePath(readedMriObjectFileDesc.getAbsolutePath());
-        savedExperiment.setFlowFilePath(readedMriObjectFileFlow.getAbsolutePath());
-        savedExperiment.setTypeFilePath(readedMriObjectFileType.getAbsolutePath());
+            savedExperiment.setOptionsFilePath(createOptionsFile(savedExperiment.getId()));
+            savedExperiment.setDescFilePath(readedMriObjectFileDesc.getAbsolutePath());
+            savedExperiment.setFlowFilePath(readedMriObjectFileFlow.getAbsolutePath());
+            savedExperiment.setTypeFilePath(readedMriObjectFileType.getAbsolutePath());
 
-        ExperimentRepository.merge(savedExperiment);
+            ExperimentRepository.merge(savedExperiment);
+            mainWindowController.addExperimentToExperimentsList(savedExperiment);
+            closeWindow();
+        }
     }
 
-    private String createOptionsFile(Integer id) {
+    private String createOptionsFile(Long id) {
         String path = System.getProperty("user.home") + "\\MRISimulatorDB\\in\\" + id + "\\"
                 + "options_" + newExperimentNameTextField.getText() + "_" + id + ".txt";
         File optionsFile = new File(path);
@@ -321,9 +329,9 @@ public class NewExperimentWindowController {
         return optionsFile.getAbsolutePath();
     }
 
-    private short validateFields() {
+    private boolean validateFields() {
         //todo - walidacja elemwentów
-        return 0;
+        return true;
     }
 
     private void setParameter(String experimentParameter, String value) {
@@ -400,5 +408,17 @@ public class NewExperimentWindowController {
         return experimentParameters;
     }
 
+    public MainWindowController getMainWindowController() {
+        return mainWindowController;
+    }
+
+    public void setMainWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) newExperimentSaveButton.getScene().getWindow();
+        stage.close();
+    }
 }
 

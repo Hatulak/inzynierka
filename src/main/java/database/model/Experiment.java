@@ -15,8 +15,9 @@ import javax.persistence.Id;
 public class Experiment {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     private String name;
+    private Status status;
     private String optionsFilePath;
     private String descFilePath;
     private String flowFilePath;
@@ -25,6 +26,7 @@ public class Experiment {
 
 
     public Experiment() {
+        this.status = Status.CREATED;
     }
 
     public Experiment(String name, String optionsFilePath, String descFilePath, String flowFilePath, String typeFilePath) {
@@ -33,10 +35,12 @@ public class Experiment {
         this.descFilePath = descFilePath;
         this.flowFilePath = flowFilePath;
         this.typeFilePath = typeFilePath;
+        this.status = Status.CREATED;
     }
 
     public Experiment(String name, String optionsFilePath) {
         this.name = name;
         this.optionsFilePath = optionsFilePath;
+        this.status = Status.CREATED;
     }
 }

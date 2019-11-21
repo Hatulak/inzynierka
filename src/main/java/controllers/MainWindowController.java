@@ -1,21 +1,26 @@
 package controllers;
 
+import database.model.Experiment;
+import database.repository.ExperimentRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import viewmodel.ExperimentTableRow;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Slf4j
@@ -37,6 +42,9 @@ public class MainWindowController {
     private TableView<ExperimentTableRow> tableExperiments;
 
     @FXML
+    private TableColumn<ExperimentTableRow, Long> tableColumnExperimentId;
+
+    @FXML
     private TableColumn<ExperimentTableRow, String> tableColumnExperimentName;
 
     @FXML
@@ -50,37 +58,58 @@ public class MainWindowController {
 
     private ObservableList<ExperimentTableRow> experimentTableRows = FXCollections.observableArrayList();
 
+//    private NewExperimentWindowController newExperimentWindowController;
 
     @FXML
     void initialize() {
         assert menuItemNewExperiment != null : "fx:id=\"menuItemNewExperiment\" was not injected: check your FXML file 'main_window.fxml'.";
         assert menuItemClose != null : "fx:id=\"menuItemClose\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableExperiments != null : "fx:id=\"tableExperiments\" was not injected: check your FXML file 'main_window.fxml'.";
+        assert tableColumnExperimentId != null : "fx:id=\"tableColumnExperimentId\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentName != null : "fx:id=\"tableColumnExperimentName\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentStatus != null : "fx:id=\"tableColumnExperimentStatus\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentAction != null : "fx:id=\"tableColumnExperimentAction\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentResults != null : "fx:id=\"tableColumnExperimentResults\" was not injected: check your FXML file 'main_window.fxml'.";
 
-
+        tableColumnExperimentId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnExperimentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnExperimentStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tableColumnExperimentAction.setCellValueFactory(new PropertyValueFactory<>("action"));
         tableColumnExperimentResults.setCellValueFactory(new PropertyValueFactory<>("result"));
 
+        initializeExperimentsList();
         tableExperiments.setItems(experimentTableRows);
 
-        menuItemNewExperiment.setOnAction(event -> {
-            try {
-                AnchorPane newExperimentAnchorPane = FXMLLoader.load(getClass().getResource("/fxml/new_experiment_window.fxml"), resources);
-                Stage stage = new Stage();
-                stage.setTitle(resources.getString("new.experiment.title"));
-                stage.setScene(new Scene(newExperimentAnchorPane));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    }
 
+    @FXML
+    public void openNewExperimentWindow(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/new_experiment_window.fxml"), resources);
+            Parent root = loader.load();
+
+            NewExperimentWindowController newExperimentWindowController = loader.getController();
+            newExperimentWindowController.setMainWindowController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle(resources.getString("new.experiment.title"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeExperimentsList() {
+        List<ExperimentTableRow> list = new LinkedList<>();
+        ExperimentRepository.getAll().forEach(e -> {
+            list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), "", ""));
+        });
+        experimentTableRows.addAll(list);
+    }
+
+    public void addExperimentToExperimentsList(Experiment experiment) {
+        experimentTableRows.add(new ExperimentTableRow(experiment.getId(), experiment.getName(), experiment.getStatus().toString(), "", ""));
     }
 }
 
