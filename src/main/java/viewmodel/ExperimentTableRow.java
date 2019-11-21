@@ -1,27 +1,46 @@
 package viewmodel;
 
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-
+import javafx.beans.property.StringProperty;
 
 public class ExperimentTableRow {
 
-    private SimpleStringProperty name;
-    private SimpleStringProperty status;
-    private SimpleStringProperty action;
-    private SimpleStringProperty result;
+    private LongProperty id;
+    private StringProperty name;
+    private StringProperty status;
+    private StringProperty action;
+    private StringProperty result;
 
-    public ExperimentTableRow(String name, String status, String action, String result) {
+    public ExperimentTableRow() {
+    }
+
+    public ExperimentTableRow(Long id, String name, String status, String action, String result) {
+        this.id = new SimpleLongProperty(id);
         this.name = new SimpleStringProperty(name);
         this.status = new SimpleStringProperty(status);
         this.action = new SimpleStringProperty(action);
         this.result = new SimpleStringProperty(result);
     }
 
+    public long getId() {
+        return id.get();
+    }
+
+    public LongProperty idProperty() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id.set(id);
+    }
+
     public String getName() {
         return name.get();
     }
 
-    public SimpleStringProperty nameProperty() {
+    public StringProperty nameProperty() {
         return name;
     }
 
@@ -33,7 +52,7 @@ public class ExperimentTableRow {
         return status.get();
     }
 
-    public SimpleStringProperty statusProperty() {
+    public StringProperty statusProperty() {
         return status;
     }
 
@@ -45,7 +64,7 @@ public class ExperimentTableRow {
         return action.get();
     }
 
-    public SimpleStringProperty actionProperty() {
+    public StringProperty actionProperty() {
         return action;
     }
 
@@ -57,7 +76,7 @@ public class ExperimentTableRow {
         return result.get();
     }
 
-    public SimpleStringProperty resultProperty() {
+    public StringProperty resultProperty() {
         return result;
     }
 

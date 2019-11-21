@@ -11,7 +11,8 @@
             <menus>
                 <Menu mnemonicParsing="false" text="%menubar.file">
                     <items>
-                        <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false" text="%menubar.new.experiment"/>
+                        <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false"
+                                  onAction="#openNewExperimentWindow" text="%menubar.new.experiment"/>
                         <MenuItem fx:id="menuItemClose" mnemonicParsing="false" text="%menubar.close"/>
                     </items>
                 </Menu>
@@ -29,6 +30,7 @@
                 <TableView fx:id="tableExperiments" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                            prefHeight="554.0" prefWidth="721.0">
                     <columns>
+                        <TableColumn fx:id="tableColumnExperimentId" prefWidth="75.0" text="%experiment.id"/>
                         <TableColumn fx:id="tableColumnExperimentName" prefWidth="223.0" text="%experiment.name"/>
                         <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="116.0"
                                      text="%experiment.status"/>
