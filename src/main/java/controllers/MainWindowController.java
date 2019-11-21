@@ -9,11 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import viewmodel.ExperimentTableRow;
 
@@ -58,8 +57,6 @@ public class MainWindowController {
 
     private ObservableList<ExperimentTableRow> experimentTableRows = FXCollections.observableArrayList();
 
-//    private NewExperimentWindowController newExperimentWindowController;
-
     @FXML
     void initialize() {
         assert menuItemNewExperiment != null : "fx:id=\"menuItemNewExperiment\" was not injected: check your FXML file 'main_window.fxml'.";
@@ -76,6 +73,30 @@ public class MainWindowController {
         tableColumnExperimentStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tableColumnExperimentAction.setCellValueFactory(new PropertyValueFactory<>("action"));
         tableColumnExperimentResults.setCellValueFactory(new PropertyValueFactory<>("result"));
+
+        Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> cellFactory = param -> {
+            final TableCell<ExperimentTableRow, String> cell = new TableCell<ExperimentTableRow, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        final Button actionButton = new Button(resources.getString("experiment.action.start"));
+                        actionButton.setOnAction(e -> {
+                            ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            log.info("Starting task with id: " + experimentTableRow.getId());
+                            //todo - wprowadzić uruchamianie zadania
+                        });
+                        setGraphic(actionButton);
+                        setText(null);
+                    }
+                }
+            };
+            return cell;
+        };
+        tableColumnExperimentAction.setCellFactory(cellFactory);
 
         initializeExperimentsList();
         tableExperiments.setItems(experimentTableRows);
@@ -103,13 +124,13 @@ public class MainWindowController {
     private void initializeExperimentsList() {
         List<ExperimentTableRow> list = new LinkedList<>();
         ExperimentRepository.getAll().forEach(e -> {
-            list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), "", ""));
+            list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), ""));
         });
         experimentTableRows.addAll(list);
     }
 
     public void addExperimentToExperimentsList(Experiment experiment) {
-        experimentTableRows.add(new ExperimentTableRow(experiment.getId(), experiment.getName(), experiment.getStatus().toString(), "", ""));
+        experimentTableRows.add(new ExperimentTableRow(experiment.getId(), experiment.getName(), experiment.getStatus().toString(), ""));
     }
 }
 

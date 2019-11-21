@@ -34,8 +34,8 @@
                         <TableColumn fx:id="tableColumnExperimentName" prefWidth="223.0" text="%experiment.name"/>
                         <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="116.0"
                                      text="%experiment.status"/>
-                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="93.0" text="%experiment.action"/>
-                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="108.0" text="%experiment.results"/>
+                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="130.0" text="%experiment.action"/>
+                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="71.0" text="%experiment.results"/>
                     </columns>
                 </TableView>
             </content>
