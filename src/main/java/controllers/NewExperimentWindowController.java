@@ -243,6 +243,7 @@ public class NewExperimentWindowController {
             savedExperiment.setDescFilePath(readedMriObjectFileDesc.getAbsolutePath());
             savedExperiment.setFlowFilePath(readedMriObjectFileFlow.getAbsolutePath());
             savedExperiment.setTypeFilePath(readedMriObjectFileType.getAbsolutePath());
+            savedExperiment.setMriOutputFilePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\mriOutput.txt");
 
             ExperimentRepository.merge(savedExperiment);
             mainWindowController.addExperimentToExperimentsList(savedExperiment);
@@ -277,6 +278,7 @@ public class NewExperimentWindowController {
             fileWriter.write(parameters.getString("map.size.two") + " " + newExperimentMapSizeTreeTwoTextField.getText() + "\n");
             fileWriter.write(parameters.getString("map.size.three") + " " + newExperimentMapSizeTreeThreeTextField.getText() + "\n");
             fileWriter.write(parameters.getString("dimension") + " " + newExperimentDimensionTextField.getText() + "\n");
+            fileWriter.write("SIMULATE_MRI 1"); //TODO - TUTAJ UWAGA JEST HARDCODED
             fileWriter.write(parameters.getString("mri.object") + " " + newExperimentMRIObjectTextField.getText() + "\n");
             fileWriter.write(parameters.getString("mri.object.file") + " " + optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + "\n");
             fileWriter.write(parameters.getString("mri.method") + " " + newExperimentMRIMethodTextField.getText() + "\n");

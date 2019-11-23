@@ -4,6 +4,7 @@ import database.model.Experiment;
 import database.utils.EMProvider;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -27,6 +28,13 @@ public class ExperimentRepository {
     public static List<Experiment> getAll() {
         Query q = em.createQuery("SELECT e FROM Experiment e");
         return (List<Experiment>) q.getResultList();
+    }
+
+    public static Experiment findById(long id) {
+        Experiment experiment = em.find(Experiment.class, id);
+        if (experiment == null)
+            throw new EntityNotFoundException("Can't find experiment with ID: " + id);
+        return experiment;
     }
 
 }
