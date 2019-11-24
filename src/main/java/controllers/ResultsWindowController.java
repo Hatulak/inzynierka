@@ -1,12 +1,23 @@
 package controllers;
 
+import database.model.Experiment;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.ResourceBundle;
 
+@Slf4j
 public class ResultsWindowController {
 
     @FXML
@@ -28,23 +39,102 @@ public class ResultsWindowController {
     private ImageView imagePhaseImageView;
 
     @FXML
-    private TextArea imagePhaseTextArea;
-
-    @FXML
     private TextArea kSpaceReTextArea;
 
     @FXML
     private TextArea kSpaceImTextArea;
 
-    @FXML
-    void initialize() {
-        assert programOutputTextArea != null : "fx:id=\"programOutputTextArea\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert imageAmpImageView != null : "fx:id=\"imageAmpImageView\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert imageAmpTextArea != null : "fx:id=\"imageAmpTextArea\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert imagePhaseImageView != null : "fx:id=\"imagePhaseImageView\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert imagePhaseTextArea != null : "fx:id=\"imagePhaseTextArea\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert kSpaceReTextArea != null : "fx:id=\"kSpaceReTextArea\" was not injected: check your FXML file 'results_window.fxml'.";
-        assert kSpaceImTextArea != null : "fx:id=\"kSpaceImTextArea\" was not injected: check your FXML file 'results_window.fxml'.";
+    private MainWindowController mainWindowController;
+    private Experiment experiment;
 
+    public void init() {
+        initProgramOutputTextArea();
+        initImageAmpTextArea();
+        initKSpaceReTextArea();
+        initKSpaceImTextArea();
+        initImageAmpImageView();
+        initImagePhaseImageView();
+    }
+
+    private void initImagePhaseImageView() {
+        try {
+            FileInputStream fis = new FileInputStream(new File(experiment.getOutputImagePhaseBmpPath()));
+            Image read = new Image(fis, imagePhaseImageView.getFitWidth(), imagePhaseImageView.getFitHeight(), true, true);
+            imagePhaseImageView.setImage(read);
+        } catch (FileNotFoundException e) {
+            log.error("Error during ImagePhaseBmp loading, path:" + experiment.getOutputImagePhaseBmpPath());
+            e.printStackTrace();
+        }
+    }
+
+    private void initImageAmpImageView() {
+        try {
+            FileInputStream fis = new FileInputStream(new File(experiment.getOutputImageAmpBmpPath()));
+            Image read = new Image(fis, imageAmpImageView.getFitWidth(), imageAmpImageView.getFitHeight(), true, true);
+            imageAmpImageView.setImage(read);
+        } catch (FileNotFoundException e) {
+            log.error("Error during ImageAmpBmp loading, path:" + experiment.getOutputImageAmpBmpPath());
+            e.printStackTrace();
+        }
+    }
+
+    private void initKSpaceReTextArea() {
+        try {
+            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputKSpaceRePath()));
+            StringBuilder string = new StringBuilder();
+            for (String s : strings)
+                string.append(s).append("\n");
+            kSpaceReTextArea.setText(string.toString());
+        } catch (IOException e) {
+            log.error("Error during KSpaceReFile loading, path:" + experiment.getOutputKSpaceRePath());
+            e.printStackTrace();
+        }
+    }
+
+    private void initKSpaceImTextArea() {
+        try {
+            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputKSpaceImPath()));
+            StringBuilder string = new StringBuilder();
+            for (String s : strings)
+                string.append(s).append("\n");
+            kSpaceImTextArea.setText(string.toString());
+        } catch (IOException e) {
+            log.error("Error during KSpaceImFile loading, path:" + experiment.getOutputKSpaceImPath());
+            e.printStackTrace();
+        }
+    }
+
+    private void initImageAmpTextArea() {
+        try {
+            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputImageAmpTxtPath()));
+            StringBuilder string = new StringBuilder();
+            for (String s : strings)
+                string.append(s).append("\n");
+            imageAmpTextArea.setText(string.toString());
+        } catch (IOException e) {
+            log.error("Error during ImageAmpTxtFile loading, path:" + experiment.getOutputImageAmpTxtPath());
+            e.printStackTrace();
+        }
+    }
+
+    private void initProgramOutputTextArea() {
+        try {
+            List<String> strings = Files.readAllLines(Paths.get(experiment.getMriOutputFilePath()));
+            StringBuilder string = new StringBuilder();
+            for (String s : strings)
+                string.append(s).append("\n");
+            programOutputTextArea.setText(string.toString());
+        } catch (IOException e) {
+            log.error("Error during mriOutputFile loading, path:" + experiment.getMriOutputFilePath());
+            e.printStackTrace();
+        }
+    }
+
+    public void setMainWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+    }
+
+    public void setExperiment(Experiment experiment) {
+        this.experiment = experiment;
     }
 }

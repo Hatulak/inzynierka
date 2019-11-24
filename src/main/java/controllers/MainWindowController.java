@@ -75,8 +75,8 @@ public class MainWindowController {
         tableColumnExperimentAction.setCellValueFactory(new PropertyValueFactory<>("action"));
         tableColumnExperimentResults.setCellValueFactory(new PropertyValueFactory<>("result"));
 
-        Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> cellFactory = param -> {
-            final TableCell<ExperimentTableRow, String> cell = new TableCell<ExperimentTableRow, String>() {
+        Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> actionsCellFactory = param -> {
+            return new TableCell<ExperimentTableRow, String>() {
                 @Override
                 public void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -98,13 +98,54 @@ public class MainWindowController {
                     }
                 }
             };
-            return cell;
         };
-        tableColumnExperimentAction.setCellFactory(cellFactory);
+        tableColumnExperimentAction.setCellFactory(actionsCellFactory);
+
+        Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> resultsCellFactory = param -> {
+            return new TableCell<ExperimentTableRow, String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                        setText(null);
+                    } else {
+                        final Button actionButton = new Button(resources.getString("experiment.results"));
+                        actionButton.setOnAction(e -> {
+                            ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
+                            showExperimentResults(experiment);
+                        });
+                        setGraphic(actionButton);
+                        setText(null);
+                    }
+                }
+            };
+        };
+        tableColumnExperimentResults.setCellFactory(resultsCellFactory);
 
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
 
+    }
+
+    private void showExperimentResults(Experiment experiment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/results_window.fxml"), resources);
+            Parent root = loader.load();
+
+            ResultsWindowController resultsWindowController = loader.getController();
+            resultsWindowController.setMainWindowController(this);
+            resultsWindowController.setExperiment(experiment);
+            resultsWindowController.init();
+
+            Stage stage = new Stage();
+            stage.setTitle(resources.getString("experiment.results"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startProcessingExperiment(Experiment experiment) {
