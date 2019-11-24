@@ -23,6 +23,11 @@ public class Experiment {
     private String flowFilePath;
     private String typeFilePath;
     private String mriOutputFilePath;
+    private String outputKSpaceRePath;
+    private String outputKSpaceImPath;
+    private String outputImageAmpTxtPath;
+    private String outputImageAmpBmpPath;
+    private String outputImagePhaseBmpPath;
 
 
     public Experiment() {
@@ -42,5 +47,24 @@ public class Experiment {
         this.name = name;
         this.optionsFilePath = optionsFilePath;
         this.status = Status.CREATED;
+    }
+
+    @Override
+    public String toString() {
+        return "Experiment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", optionsFilePath='" + optionsFilePath + '\'' +
+                ", descFilePath='" + descFilePath + '\'' +
+                ", flowFilePath='" + flowFilePath + '\'' +
+                ", typeFilePath='" + typeFilePath + '\'' +
+                ", mriOutputFilePath='" + mriOutputFilePath + '\'' +
+                ", outputKSpaceRePath='" + outputKSpaceRePath + '\'' +
+                ", outputKSpaceImPath='" + outputKSpaceImPath + '\'' +
+                ", outputImageAmpTxtPath='" + outputImageAmpTxtPath + '\'' +
+                ", outputImageAmpBmpPath='" + outputImageAmpBmpPath + '\'' +
+                ", outputImagePhaseBmpPath='" + outputImagePhaseBmpPath + '\'' +
+                '}';
     }
 }

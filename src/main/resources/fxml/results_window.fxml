@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResultsWindowController">
+    <children>
+        <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="%results.program.output">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="563.0">
+                            <children>
+                                <TextArea fx:id="programOutputTextArea" layoutY="-1.0"
+                                          maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                          prefHeight="373.0" prefWidth="600.0" AnchorPane.bottomAnchor="10.0"
+                                          AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                                          AnchorPane.topAnchor="10.0">
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                </TextArea>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%results.image.amp">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ImageView fx:id="imageAmpImageView" fitHeight="342.0" fitWidth="280.0" layoutX="14.0"
+                                           layoutY="14.0" pickOnBounds="true" preserveRatio="true"
+                                           AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                                           AnchorPane.topAnchor="10.0"/>
+                                <TextArea fx:id="imageAmpTextArea" layoutX="294.0" layoutY="14.0"
+                                          maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                          prefHeight="339.0" prefWidth="298.0" AnchorPane.bottomAnchor="10.0"
+                                          AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                </TextArea>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%results.image.phase">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ImageView fx:id="imagePhaseImageView" fitHeight="342.0" fitWidth="583.0" layoutX="14.0"
+                                           layoutY="15.0" pickOnBounds="true" preserveRatio="true"
+                                           AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="10.0"
+                                           AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%results.kspace">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="87.0"
+                                       text="%results.kspace.re.txt" AnchorPane.leftAnchor="15.0"
+                                       AnchorPane.topAnchor="10.0"/>
+                                <Label layoutX="300.0" layoutY="14.0" prefHeight="17.0" prefWidth="87.0"
+                                       text="%results.kspace.im.txt" AnchorPane.topAnchor="10.0"/>
+                                <TextArea fx:id="kSpaceReTextArea" layoutX="14.0" layoutY="31.0"
+                                          maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                          prefHeight="331.0" prefWidth="277.0" AnchorPane.bottomAnchor="10.0"
+                                          AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="30.0">
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                </TextArea>
+                                <TextArea fx:id="kSpaceImTextArea" layoutX="292.0" layoutY="31.0"
+                                          maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                          prefHeight="331.0" prefWidth="292.0" AnchorPane.bottomAnchor="10.0"
+                                          AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
+                                    <padding>
+                                        <Insets top="10.0"/>
+                                    </padding>
+                                </TextArea>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</AnchorPane>
