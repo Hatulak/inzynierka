@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Data
 @Builder
@@ -17,6 +18,7 @@ public class Experiment {
     @GeneratedValue
     private Long id;
     private String name;
+    private Date creationDate;
     private Status status;
     private String optionsFilePath;
     private String descFilePath;
@@ -28,10 +30,13 @@ public class Experiment {
     private String outputImageAmpTxtPath;
     private String outputImageAmpBmpPath;
     private String outputImagePhaseBmpPath;
+//    @OneToMany(cascade = CascadeType.ALL,orphanRemoval =  true)
+//    private List<Result> resultList;
 
 
     public Experiment() {
         this.status = Status.CREATED;
+        this.creationDate = new Date();
     }
 
     public Experiment(String name, String optionsFilePath, String descFilePath, String flowFilePath, String typeFilePath) {
@@ -41,30 +46,13 @@ public class Experiment {
         this.flowFilePath = flowFilePath;
         this.typeFilePath = typeFilePath;
         this.status = Status.CREATED;
+        this.creationDate = new Date();
     }
 
     public Experiment(String name, String optionsFilePath) {
         this.name = name;
         this.optionsFilePath = optionsFilePath;
         this.status = Status.CREATED;
-    }
-
-    @Override
-    public String toString() {
-        return "Experiment{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", optionsFilePath='" + optionsFilePath + '\'' +
-                ", descFilePath='" + descFilePath + '\'' +
-                ", flowFilePath='" + flowFilePath + '\'' +
-                ", typeFilePath='" + typeFilePath + '\'' +
-                ", mriOutputFilePath='" + mriOutputFilePath + '\'' +
-                ", outputKSpaceRePath='" + outputKSpaceRePath + '\'' +
-                ", outputKSpaceImPath='" + outputKSpaceImPath + '\'' +
-                ", outputImageAmpTxtPath='" + outputImageAmpTxtPath + '\'' +
-                ", outputImageAmpBmpPath='" + outputImageAmpBmpPath + '\'' +
-                ", outputImagePhaseBmpPath='" + outputImagePhaseBmpPath + '\'' +
-                '}';
+        this.creationDate = new Date();
     }
 }

@@ -59,6 +59,12 @@ public class MainWindowController {
     @FXML
     private TableColumn<ExperimentTableRow, String> tableColumnExperimentResults;
 
+    @FXML
+    private TableColumn<ExperimentTableRow, String> tableColumnExperimentCreationDate;
+
+    @FXML
+    private TableColumn<ExperimentTableRow, String> tableColumnExperimentProgress;
+
     private ObservableList<ExperimentTableRow> experimentsObservableList = FXCollections.observableArrayList();
 
     private ExecutorService executorService;
@@ -73,14 +79,17 @@ public class MainWindowController {
         assert tableColumnExperimentStatus != null : "fx:id=\"tableColumnExperimentStatus\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentAction != null : "fx:id=\"tableColumnExperimentAction\" was not injected: check your FXML file 'main_window.fxml'.";
         assert tableColumnExperimentResults != null : "fx:id=\"tableColumnExperimentResults\" was not injected: check your FXML file 'main_window.fxml'.";
+        assert tableColumnExperimentCreationDate != null : "fx:id=\"tableColumnExperimentCreationDate\" was not injected: check your FXML file 'main_window.fxml'.";
 
         tableColumnExperimentId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnExperimentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnExperimentStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         tableColumnExperimentAction.setCellValueFactory(new PropertyValueFactory<>("action"));
         tableColumnExperimentResults.setCellValueFactory(new PropertyValueFactory<>("result"));
+        tableColumnExperimentProgress.setCellValueFactory(new PropertyValueFactory<>("progress"));
+        tableColumnExperimentCreationDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
 
-        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+
 
         Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> actionsCellFactory = param -> {
             return new TableCell<ExperimentTableRow, String>() {
@@ -129,6 +138,9 @@ public class MainWindowController {
         };
         tableColumnExperimentResults.setCellFactory(resultsCellFactory);
 
+
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
 
@@ -161,9 +173,15 @@ public class MainWindowController {
     }
 
     public void refeshExperimentList() {
-        experimentsObservableList.clear();
+//        experimentsObservableList.clear();
         ExperimentRepository.getAll().forEach(e -> {
-            experimentsObservableList.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), ""));
+            for (ExperimentTableRow experimentTableRow : experimentsObservableList) {
+                if (experimentTableRow.getId() == e.getId()) {
+                    experimentTableRow.setName(e.getName());
+                    experimentTableRow.setStatus(e.getStatus().toString());
+                }
+            }
+//            experimentsObservableList.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), ""));
         });
 
     }
@@ -189,13 +207,18 @@ public class MainWindowController {
     private void initializeExperimentsList() {
         List<ExperimentTableRow> list = new LinkedList<>();
         ExperimentRepository.getAll().forEach(e -> {
-            list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), ""));
+            list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), "", e.getCreationDate()));
         });
         experimentsObservableList.addAll(list);
     }
 
     public void addExperimentToExperimentsList(Experiment experiment) {
-        experimentsObservableList.add(new ExperimentTableRow(experiment.getId(), experiment.getName(), experiment.getStatus().toString(), ""));
+        experimentsObservableList.add(new ExperimentTableRow(experiment.getId(), experiment.getName(), experiment.getStatus().toString(), "", experiment.getCreationDate()));
     }
+
+    public ObservableList<ExperimentTableRow> getExperimentsObservableList() {
+        return experimentsObservableList;
+    }
+
 }
 

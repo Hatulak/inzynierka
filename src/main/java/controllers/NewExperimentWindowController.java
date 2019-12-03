@@ -208,11 +208,9 @@ public class NewExperimentWindowController {
     @FXML
     void readFileWithOptions(ActionEvent event) {
         ResourceBundle messagesBundle = ResourceBundle.getBundle("bundles.messages");
-        //fixme - powrócić do filechoosera jak na testowym pliku bedzie git
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(messagesBundle.getString("new.experiment.load.file.with.options"));
         fileWithOptions = fileChooser.showOpenDialog(null);
-//        fileWithOptions = new File(String.valueOf(Paths.get("E:\\Repozytoria\\inzynierka\\inout\\in\\ISBI2012\\addEllipse\\optionsMRI_addEllipse.txt"))); //a to usunąć
         try {
             List<String> fileLines = Files.readAllLines(Paths.get(fileWithOptions.getPath()));
             List<String> experimentParameters = getExperimentParametersFromBundle();
@@ -242,6 +240,7 @@ public class NewExperimentWindowController {
             Experiment experiment = Experiment.builder()
                     .name(newExperimentNameTextField.getText())
                     .status(Status.CREATED)
+                    .creationDate(new Date())
                     .build();
             Experiment savedExperiment = ExperimentRepository.save(experiment);
 

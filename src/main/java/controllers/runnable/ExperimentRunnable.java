@@ -4,7 +4,9 @@ import controllers.MainWindowController;
 import database.model.Experiment;
 import database.model.Status;
 import database.repository.ExperimentRepository;
+import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
+import viewmodel.ExperimentTableRow;
 
 import java.io.*;
 
@@ -24,6 +26,15 @@ public class ExperimentRunnable implements Runnable {
         experiment.setStatus(Status.RUNNING);
         ExperimentRepository.merge(experiment);
         mainWindowController.refeshExperimentList();
+        ExperimentTableRow experimentTR = null;
+        ObservableList<ExperimentTableRow> experimentsList = mainWindowController.getExperimentsObservableList();
+        for (ExperimentTableRow experimentTableRow : experimentsList) {
+            if (experimentTableRow.getId() == experiment.getId()) {
+                experimentTR = experimentTableRow;
+                break;
+            }
+
+        }
         File outputFile = new File(experiment.getMriOutputFilePath());
         try {
             outputFile.createNewFile();
@@ -32,7 +43,7 @@ public class ExperimentRunnable implements Runnable {
             e.printStackTrace();
         }
         ProcessBuilder builder = new ProcessBuilder("lbm.exe", experiment.getOptionsFilePath())
-                .directory(new File("C:\\Users\\Przemek\\MRISimulatorDB")); //todo - tak nie może być, trzeba naprawić
+                .directory(new File(System.getProperty("user.home") + "\\MRISimulatorDB"));
         Process process = null;
         try {
             process = builder.start();
@@ -53,7 +64,14 @@ public class ExperimentRunnable implements Runnable {
                     os.write('\n');
                     break;
                 }
-                //todo - tu pewnie jakaś obsługa progress bara czy coś takiego
+                if (line.startsWith("test-")) {
+                    String[] split = line.split(" ");
+                    int currentIndex = Integer.parseInt(split[2].substring(0, split[2].length() - 1));
+                    int endIndex = Integer.parseInt(split[3].substring(0, split[3].length() - 1));
+                    experimentsList.remove(experimentTR);
+                    experimentTR.setProgress(currentIndex + "\\" + endIndex);
+                    experimentsList.add(experimentTR);
+                }
             }
             fileWriter.close();
             experiment.setStatus(Status.DONE);

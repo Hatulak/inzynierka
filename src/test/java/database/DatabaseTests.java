@@ -15,7 +15,7 @@ class DatabaseTests {
                 .optionsFilePath("testPath")
                 .build();
         em.getTransaction().begin();
-        em.persist(new Experiment("testowy", "testttt"));
+        em.persist(Experiment.builder().name("asd").build());
         em.getTransaction().commit();
         em.close();
     }

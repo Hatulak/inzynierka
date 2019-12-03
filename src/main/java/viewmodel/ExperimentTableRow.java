@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class ExperimentTableRow {
 
@@ -12,15 +15,19 @@ public class ExperimentTableRow {
     private StringProperty name;
     private StringProperty status;
     private StringProperty result;
+    private StringProperty progress;
+    private StringProperty creationDate;
 
     public ExperimentTableRow() {
     }
 
-    public ExperimentTableRow(Long id, String name, String status, String result) {
+    public ExperimentTableRow(Long id, String name, String status, String result, Date creationDate) {
         this.id = new SimpleLongProperty(id);
         this.name = new SimpleStringProperty(name);
         this.status = new SimpleStringProperty(status);
         this.result = new SimpleStringProperty(result);
+        this.progress = new SimpleStringProperty("");
+        this.creationDate = new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy HH:mm").format(creationDate));
     }
 
     public long getId() {
@@ -69,5 +76,29 @@ public class ExperimentTableRow {
 
     public void setResult(String result) {
         this.result.set(result);
+    }
+
+    public String getProgress() {
+        return progress.get();
+    }
+
+    public StringProperty progressProperty() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress.set(progress);
+    }
+
+    public String getCreationDate() {
+        return creationDate.get();
+    }
+
+    public StringProperty creationDateProperty() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate.set(creationDate);
     }
 }
