@@ -2,13 +2,21 @@ package controllers.runnable;
 
 import controllers.MainWindowController;
 import database.model.Experiment;
+import database.model.Result;
 import database.model.Status;
 import database.repository.ExperimentRepository;
+import database.repository.ResultRepository;
+import database.utils.CommonConstants;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 import viewmodel.ExperimentTableRow;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 @Slf4j
 public class ExperimentRunnable implements Runnable {
@@ -23,8 +31,10 @@ public class ExperimentRunnable implements Runnable {
 
     @Override
     public void run() {
+        Result result = prepareResultEntity();
         experiment.setStatus(Status.RUNNING);
         ExperimentRepository.merge(experiment);
+
         mainWindowController.refeshExperimentList();
         ExperimentTableRow experimentTR = null;
         ObservableList<ExperimentTableRow> experimentsList = mainWindowController.getExperimentsObservableList();
@@ -35,14 +45,14 @@ public class ExperimentRunnable implements Runnable {
             }
 
         }
-        File outputFile = new File(experiment.getMriOutputFilePath());
+        File outputFile = new File(result.getMriOutputFilePath());
         try {
             outputFile.createNewFile();
         } catch (IOException e) {
-            log.error("Error during file creation, experiment id: " + experiment.getId());
+            log.error("Error during file creation, experiment id: " + experiment.getId() + " result id: " + result.getId());
             e.printStackTrace();
         }
-        ProcessBuilder builder = new ProcessBuilder("lbm.exe", experiment.getOptionsFilePath())
+        ProcessBuilder builder = new ProcessBuilder("lbm.exe", result.getOptionsFilePath())
                 .directory(new File(System.getProperty("user.home") + "\\MRISimulatorDB"));
         Process process = null;
         try {
@@ -65,15 +75,19 @@ public class ExperimentRunnable implements Runnable {
                     break;
                 }
                 if (line.startsWith("test-")) {
+                    line = line.replaceAll("[^0-9]+", " "); //Zmiana wszystkich znaków oprócz liczb na spacje
+                    line = line.trim(); //usuwanie nadmiarowych spacji
                     String[] split = line.split(" ");
-                    int currentIndex = Integer.parseInt(split[2].substring(0, split[2].length() - 1));
-                    int endIndex = Integer.parseInt(split[3].substring(0, split[3].length() - 1));
+                    int currentIndex = Integer.parseInt(split[0]);
+                    int endIndex = Integer.parseInt(split[1]);
                     experimentsList.remove(experimentTR);
                     experimentTR.setProgress(currentIndex + "\\" + endIndex);
                     experimentsList.add(experimentTR);
                 }
             }
             fileWriter.close();
+            result.setEndingDate(new Date());
+            ResultRepository.merge(result);
             experiment.setStatus(Status.DONE);
             ExperimentRepository.merge(experiment);
             mainWindowController.refeshExperimentList();
@@ -81,5 +95,62 @@ public class ExperimentRunnable implements Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    private Result prepareResultEntity() {
+        Result result = ResultRepository.save(Result.builder()
+                .experiment(experiment)
+                .beginningDate(new Date())
+                .build());
+        try {
+            String optionsFilePath = System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + "options_" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT;
+            File optionsFile = new File(optionsFilePath);
+            optionsFile.getParentFile().mkdirs();
+
+            Path copy = Files.copy(Paths.get(Paths.get(experiment.getOptionsFilePath()).toFile().getAbsolutePath()),
+                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + "options_" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT));
+            optionsFile = new File(copy.toAbsolutePath().toString());
+            ResourceBundle parameters = ResourceBundle.getBundle("bundles.experiment_parameters");
+            FileWriter fileWriter = new FileWriter(optionsFile, true);
+            fileWriter.write(parameters.getString("output.kspace.re.file.txt") + " " +
+                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_RE_TXT + "\n");
+
+            fileWriter.write(parameters.getString("output.kspace.im.file.txt") + " " +
+                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_IM_TXT + "\n");
+
+            fileWriter.write(parameters.getString("output.image.amp.file.txt") + " " +
+                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_TXT + "\n");
+
+            fileWriter.write(parameters.getString("output.image.amp.file.bmp") + " " +
+                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_BMP + "\n");
+
+            fileWriter.write(parameters.getString("output.image.phase.file.bmp") + " " +
+                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                    + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_PHASE_BMP + "\n");
+            fileWriter.close();
+            result.setOptionsFilePath(copy.toAbsolutePath().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        result.setMriOutputFilePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\" + result.getId() + "\\" + "mriOutput.txt");
+        result.setOutputKSpaceRePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_RE_TXT);
+        result.setOutputKSpaceImPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_IM_TXT);
+        result.setOutputImageAmpTxtPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_TXT);
+        result.setOutputImageAmpBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_BMP);
+        result.setOutputImagePhaseBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_PHASE_BMP);
+
+        ResultRepository.merge(result);
+
+        return ResultRepository.findById(result.getId());
     }
 }

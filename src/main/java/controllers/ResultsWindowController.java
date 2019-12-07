@@ -1,6 +1,7 @@
 package controllers;
 
 import database.model.Experiment;
+import database.model.Result;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -46,6 +47,7 @@ public class ResultsWindowController {
 
     private MainWindowController mainWindowController;
     private Experiment experiment;
+    private Result result;
 
     public void init() {
         initProgramOutputTextArea();
@@ -58,74 +60,74 @@ public class ResultsWindowController {
 
     private void initImagePhaseImageView() {
         try {
-            FileInputStream fis = new FileInputStream(new File(experiment.getOutputImagePhaseBmpPath()));
+            FileInputStream fis = new FileInputStream(new File(result.getOutputImagePhaseBmpPath()));
             Image read = new Image(fis, imagePhaseImageView.getFitWidth(), imagePhaseImageView.getFitHeight(), true, true);
             imagePhaseImageView.setImage(read);
         } catch (FileNotFoundException e) {
-            log.error("Error during ImagePhaseBmp loading, path:" + experiment.getOutputImagePhaseBmpPath());
+            log.error("Error during ImagePhaseBmp loading, path:" + result.getOutputImagePhaseBmpPath());
             e.printStackTrace();
         }
     }
 
     private void initImageAmpImageView() {
         try {
-            FileInputStream fis = new FileInputStream(new File(experiment.getOutputImageAmpBmpPath()));
+            FileInputStream fis = new FileInputStream(new File(result.getOutputImageAmpBmpPath()));
             Image read = new Image(fis, imageAmpImageView.getFitWidth(), imageAmpImageView.getFitHeight(), true, true);
             imageAmpImageView.setImage(read);
         } catch (FileNotFoundException e) {
-            log.error("Error during ImageAmpBmp loading, path:" + experiment.getOutputImageAmpBmpPath());
+            log.error("Error during ImageAmpBmp loading, path:" + result.getOutputImageAmpBmpPath());
             e.printStackTrace();
         }
     }
 
     private void initKSpaceReTextArea() {
         try {
-            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputKSpaceRePath()));
+            List<String> strings = Files.readAllLines(Paths.get(result.getOutputKSpaceRePath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             kSpaceReTextArea.setText(string.toString());
         } catch (IOException e) {
-            log.error("Error during KSpaceReFile loading, path:" + experiment.getOutputKSpaceRePath());
+            log.error("Error during KSpaceReFile loading, path:" + result.getOutputKSpaceRePath());
             e.printStackTrace();
         }
     }
 
     private void initKSpaceImTextArea() {
         try {
-            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputKSpaceImPath()));
+            List<String> strings = Files.readAllLines(Paths.get(result.getOutputKSpaceImPath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             kSpaceImTextArea.setText(string.toString());
         } catch (IOException e) {
-            log.error("Error during KSpaceImFile loading, path:" + experiment.getOutputKSpaceImPath());
+            log.error("Error during KSpaceImFile loading, path:" + result.getOutputKSpaceImPath());
             e.printStackTrace();
         }
     }
 
     private void initImageAmpTextArea() {
         try {
-            List<String> strings = Files.readAllLines(Paths.get(experiment.getOutputImageAmpTxtPath()));
+            List<String> strings = Files.readAllLines(Paths.get(result.getOutputImageAmpTxtPath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             imageAmpTextArea.setText(string.toString());
         } catch (IOException e) {
-            log.error("Error during ImageAmpTxtFile loading, path:" + experiment.getOutputImageAmpTxtPath());
+            log.error("Error during ImageAmpTxtFile loading, path:" + result.getOutputImageAmpTxtPath());
             e.printStackTrace();
         }
     }
 
     private void initProgramOutputTextArea() {
         try {
-            List<String> strings = Files.readAllLines(Paths.get(experiment.getMriOutputFilePath()));
+            List<String> strings = Files.readAllLines(Paths.get(result.getMriOutputFilePath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             programOutputTextArea.setText(string.toString());
         } catch (IOException e) {
-            log.error("Error during mriOutputFile loading, path:" + experiment.getMriOutputFilePath());
+            log.error("Error during mriOutputFile loading, path:" + result.getMriOutputFilePath());
             e.printStackTrace();
         }
     }
@@ -136,5 +138,9 @@ public class ResultsWindowController {
 
     public void setExperiment(Experiment experiment) {
         this.experiment = experiment;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 }

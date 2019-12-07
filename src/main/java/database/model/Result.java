@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -26,6 +24,9 @@ public class Result {
     private String outputImageAmpTxtPath;
     private String outputImageAmpBmpPath;
     private String outputImagePhaseBmpPath;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "experimentId")
+    private Experiment experiment;
 
     public Result() {
 

@@ -24,12 +24,13 @@ public class Experiment {
     private String descFilePath;
     private String flowFilePath;
     private String typeFilePath;
-    private String mriOutputFilePath;
-    private String outputKSpaceRePath;
-    private String outputKSpaceImPath;
-    private String outputImageAmpTxtPath;
-    private String outputImageAmpBmpPath;
-    private String outputImagePhaseBmpPath;
+//    private String mriOutputFilePath;
+//    private String outputKSpaceRePath;
+//    private String outputKSpaceImPath;
+//    private String outputImageAmpTxtPath;
+//    private String outputImageAmpBmpPath;
+//    private String outputImagePhaseBmpPath;
+
 //    @OneToMany(cascade = CascadeType.ALL,orphanRemoval =  true)
 //    private List<Result> resultList;
 

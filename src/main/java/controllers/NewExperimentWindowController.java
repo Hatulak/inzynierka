@@ -3,6 +3,7 @@ package controllers;
 import database.model.Experiment;
 import database.model.Status;
 import database.repository.ExperimentRepository;
+import database.utils.CommonConstants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,16 +27,6 @@ import java.util.*;
 @Slf4j
 public class NewExperimentWindowController {
 
-    public static final String DESC_TXT = "_desc.txt";
-    public static final String FLOW_TXT = "_flow.txt";
-    public static final String TYPE_TXT = "_type.txt";
-    public static final String KSPACE_RE_TXT = "_kspaceRe";
-    public static final String KSPACE_IM_TXT = "_kspaceIm";
-    public static final String IMAGE_AMP_TXT = "_imageAmp";
-    public static final String IMAGE_AMP_BMP = "_imageAmp";
-    public static final String IMAGE_PHASE_BMP = "_imagePhase";
-    public static final String TXT = ".txt";
-    public static final String SLICE_BMP = "_(001 slice).bmp";
 
 
     @FXML
@@ -248,12 +239,12 @@ public class NewExperimentWindowController {
             savedExperiment.setDescFilePath(readedMriObjectFileDesc.getAbsolutePath());
             savedExperiment.setFlowFilePath(readedMriObjectFileFlow.getAbsolutePath());
             savedExperiment.setTypeFilePath(readedMriObjectFileType.getAbsolutePath());
-            savedExperiment.setMriOutputFilePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\mriOutput.txt");
-            savedExperiment.setOutputKSpaceRePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + KSPACE_RE_TXT + TXT);
-            savedExperiment.setOutputKSpaceImPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + KSPACE_IM_TXT + TXT);
-            savedExperiment.setOutputImageAmpTxtPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + IMAGE_AMP_TXT + TXT);
-            savedExperiment.setOutputImageAmpBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + IMAGE_AMP_BMP + SLICE_BMP);
-            savedExperiment.setOutputImagePhaseBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + IMAGE_PHASE_BMP + SLICE_BMP);
+//            savedExperiment.setMriOutputFilePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" +"mriOutput.txt");
+//            savedExperiment.setOutputKSpaceRePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + CommonConstants.KSPACE_RE_TXT + CommonConstants.TXT);
+//            savedExperiment.setOutputKSpaceImPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + CommonConstants.KSPACE_IM_TXT + CommonConstants.TXT);
+//            savedExperiment.setOutputImageAmpTxtPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + CommonConstants.IMAGE_AMP_TXT + CommonConstants.TXT);
+//            savedExperiment.setOutputImageAmpBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + CommonConstants.IMAGE_AMP_BMP + CommonConstants.SLICE_BMP);
+//            savedExperiment.setOutputImagePhaseBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + savedExperiment.getId() + "\\" + newExperimentNameTextField.getText() + "_" + savedExperiment.getId() + CommonConstants.IMAGE_PHASE_BMP + CommonConstants.SLICE_BMP);
             ExperimentRepository.merge(savedExperiment);
             mainWindowController.addExperimentToExperimentsList(savedExperiment);
             closeWindow();
@@ -262,21 +253,21 @@ public class NewExperimentWindowController {
 
     private String createOptionsFile(Long id) {
         String path = System.getProperty("user.home") + "\\MRISimulatorDB\\in\\" + id + "\\"
-                + "options_" + newExperimentNameTextField.getText() + "_" + id + TXT;
+                + "options_" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.TXT;
         File optionsFile = new File(path);
         optionsFile.getParentFile().mkdirs();
         try {
             optionsFile.createNewFile();
             Path descCopyPath = Files.copy(Paths.get(readedMriObjectFileDesc.getAbsolutePath()),
-                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + DESC_TXT));
+                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.DESC_TXT));
             readedMriObjectFileDesc = new File(descCopyPath.toUri());
 
             Path flowCopyPath = Files.copy(Paths.get(readedMriObjectFileFlow.getAbsolutePath()),
-                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + FLOW_TXT));
+                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.FLOW_TXT));
             readedMriObjectFileFlow = new File(flowCopyPath.toUri());
 
             Path typeCopyPath = Files.copy(Paths.get(readedMriObjectFileType.getAbsolutePath()),
-                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + TYPE_TXT));
+                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.TYPE_TXT));
             readedMriObjectFileType = new File(typeCopyPath.toUri());
 
             ResourceBundle parameters = ResourceBundle.getBundle("bundles.experiment_parameters");
@@ -310,22 +301,22 @@ public class NewExperimentWindowController {
             fileWriter.write(parameters.getString("mri.flow.gmn.z") + " " + newExperimentMRIFlowGmnZTextField.getText() + "\n");
             fileWriter.write(parameters.getString("mri.flow.gmn.slice.sel") + " " + newExperimentMRIFlowGmnSliceSelTextField.getText() + "\n");
             fileWriter.write(parameters.getString("write.kspace.re.txt") + " " + (newExperimentWriteKspaceReTxtCheckBox.isSelected() ? "1" : "0") + "\n");
-            String output = System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + KSPACE_RE_TXT + "\n";
-            new File(output).getParentFile().mkdirs();
-            fileWriter.write(parameters.getString("output.kspace.re.file.txt") + " " +
-                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + KSPACE_RE_TXT + "\n");
+//            String output = System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.KSPACE_RE_TXT + "\n";
+//            new File(output).getParentFile().mkdirs();
+//            fileWriter.write(parameters.getString("output.kspace.re.file.txt") + " " +
+//                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.KSPACE_RE_TXT + "\n");
             fileWriter.write(parameters.getString("write.kspace.im.txt") + " " + (newExperimentWriteKspaceImTxtCheckBox.isSelected() ? "1" : "0") + "\n");
-            fileWriter.write(parameters.getString("output.kspace.im.file.txt") + " " +
-                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + KSPACE_IM_TXT + "\n");
+//            fileWriter.write(parameters.getString("output.kspace.im.file.txt") + " " +
+//                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.KSPACE_IM_TXT + "\n");
             fileWriter.write(parameters.getString("write.image.amp.txt") + " " + (newExperimentWriteImageAmpTxtCheckBox.isSelected() ? "1" : "0") + "\n");
-            fileWriter.write(parameters.getString("output.image.amp.file.txt") + " " +
-                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + IMAGE_AMP_TXT + "\n");
+//            fileWriter.write(parameters.getString("output.image.amp.file.txt") + " " +
+//                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.IMAGE_AMP_TXT + "\n");
             fileWriter.write(parameters.getString("write.image.amp.bmp") + " " + (newExperimentWriteImageAmpBmpCheckBox.isSelected() ? "1" : "0") + "\n");
-            fileWriter.write(parameters.getString("output.image.amp.file.bmp") + " " +
-                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + IMAGE_AMP_BMP + "\n");
+//            fileWriter.write(parameters.getString("output.image.amp.file.bmp") + " " +
+//                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.IMAGE_AMP_BMP + "\n");
             fileWriter.write(parameters.getString("write.image.phase.bmp") + " " + (newExperimentWriteImagePhaseBmpCheckBox.isSelected() ? "1" : "0") + "\n");
-            fileWriter.write(parameters.getString("output.image.phase.file.bmp") + " " +
-                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + IMAGE_PHASE_BMP + "\n");
+//            fileWriter.write(parameters.getString("output.image.phase.file.bmp") + " " +
+//                    System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + id + "\\" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.IMAGE_PHASE_BMP + "\n");
             fileWriter.write(parameters.getString("change.rf.pulse.flow.step") + " " + newExperimentChangeRfPulseFlowStepTextField.getText() + "\n");
             fileWriter.write(parameters.getString("rf.pulse.flow.step.factor") + " " + newExperimentRfPulseFlowStepFactorTextField.getText() + "\n");
             fileWriter.write(parameters.getString("change.before.acq.flow.step") + " " + newExperimentChangeBeforeACQFlowStepTextField.getText() + "\n");
@@ -374,9 +365,9 @@ public class NewExperimentWindowController {
                 //nie ma tekiego fielda bo tutaj dajemy pliki
                 ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
 
-                String descFilePath = value + DESC_TXT;
-                String flowFilePath = value + FLOW_TXT;
-                String typeFilePath = value + TYPE_TXT;
+                String descFilePath = value + CommonConstants.DESC_TXT;
+                String flowFilePath = value + CommonConstants.FLOW_TXT;
+                String typeFilePath = value + CommonConstants.TYPE_TXT;
 
                 File descFile = new File(fileWithOptions.getParent() + "\\" + Paths.get(descFilePath).getFileName());
                 if (!descFile.exists()) {
