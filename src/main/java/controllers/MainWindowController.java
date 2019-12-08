@@ -2,10 +2,8 @@ package controllers;
 
 import controllers.runnable.ExperimentRunnable;
 import database.model.Experiment;
-import database.model.Result;
 import database.model.Status;
 import database.repository.ExperimentRepository;
-import database.repository.ResultRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -150,16 +148,13 @@ public class MainWindowController {
 
     private void showExperimentResults(Experiment experiment) {
         try {
-            //todo - tutaj zamiast rezultatu to listę do wybrania rezultatu
-            Result result = ResultRepository.getAll().get(0); //fixme
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/results_window.fxml"), resources);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/results_list_window.fxml"), resources);
             Parent root = loader.load();
 
-            ResultsWindowController resultsWindowController = loader.getController();
-            resultsWindowController.setMainWindowController(this);
-            resultsWindowController.setExperiment(experiment);
-            resultsWindowController.setResult(result);
-            resultsWindowController.init();
+            ResultsListWindowController resultsListWindowController = loader.getController();
+            resultsListWindowController.setMainWindowController(this);
+            resultsListWindowController.setExperiment(experiment);
+            resultsListWindowController.init();
 
             Stage stage = new Stage();
             stage.setTitle(resources.getString("experiment.results"));

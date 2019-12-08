@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResultsListWindowController">
+    <children>
+        <TableView fx:id="tableViewResults" prefHeight="400.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="tableColumnResultId" prefWidth="37.0" text="%results.list.window.id"/>
+                <TableColumn fx:id="tableColumnResultBeginningDate" prefWidth="113.0"
+                             text="%results.list.window.beginning.date"/>
+                <TableColumn fx:id="tableColumnResultEndingDate" prefWidth="121.0"
+                             text="%results.list.window.ending.date"/>
+                <TableColumn fx:id="tableColumnResultDuration" prefWidth="75.0" text="%results.list.window.time"/>
+                <TableColumn fx:id="tableColumnResultResults" prefWidth="71.0" text="%results.list.window.results"/>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

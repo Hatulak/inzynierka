@@ -37,4 +37,9 @@ public class ResultRepository {
         return (List<Result>) q.getResultList();
     }
 
+    public static List<Result> findByExperimentId(long id) {
+        Query q = em.createQuery("SELECT r FROM Result r where r.experiment.id = :id ");
+        return (List<Result>) q.setParameter("id", id).getResultList();
+    }
+
 }

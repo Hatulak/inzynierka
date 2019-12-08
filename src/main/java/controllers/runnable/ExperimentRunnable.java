@@ -139,15 +139,15 @@ public class ExperimentRunnable implements Runnable {
         }
         result.setMriOutputFilePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\" + result.getId() + "\\" + "mriOutput.txt");
         result.setOutputKSpaceRePath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_RE_TXT);
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_RE_TXT + CommonConstants.TXT);
         result.setOutputKSpaceImPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_IM_TXT);
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.KSPACE_IM_TXT + CommonConstants.TXT);
         result.setOutputImageAmpTxtPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_TXT);
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_TXT + CommonConstants.TXT);
         result.setOutputImageAmpBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_BMP);
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_AMP_BMP + CommonConstants.SLICE_BMP);
         result.setOutputImagePhaseBmpPath(System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_PHASE_BMP);
+                + result.getId() + "\\" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.IMAGE_PHASE_BMP + CommonConstants.SLICE_BMP);
 
         ResultRepository.merge(result);
 
