@@ -1,4 +1,4 @@
-package database.utils;
+package utils;
 
 public class CommonConstants {
 

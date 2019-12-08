@@ -3,7 +3,6 @@ package controllers;
 import database.model.Experiment;
 import database.model.Status;
 import database.repository.ExperimentRepository;
-import database.utils.CommonConstants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import utils.CommonConstants;
 
 import java.io.File;
 import java.io.FileWriter;

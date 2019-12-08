@@ -6,9 +6,9 @@ import database.model.Result;
 import database.model.Status;
 import database.repository.ExperimentRepository;
 import database.repository.ResultRepository;
-import database.utils.CommonConstants;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
+import utils.CommonConstants;
 import viewmodel.ExperimentTableRow;
 
 import java.io.*;
