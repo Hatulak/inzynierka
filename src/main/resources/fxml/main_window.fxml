@@ -13,7 +13,6 @@
                     <items>
                         <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false"
                                   onAction="#openNewExperimentWindow" text="%menubar.new.experiment"/>
-                        <MenuItem fx:id="menuItemClose" mnemonicParsing="false" text="%menubar.close"/>
                     </items>
                 </Menu>
             </menus>
@@ -38,8 +37,8 @@
                                      text="%experiment.status"/>
                         <TableColumn fx:id="tableColumnExperimentProgress" prefWidth="58.0"
                                      text="%experiment.progress"/>
-                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="99.0" text="%experiment.action"/>
-                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="115.0" text="%experiment.results"/>
+                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="155.0" text="%experiment.action"/>
+                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="59.0" text="%experiment.results"/>
                     </columns>
                 </TableView>
             </content>

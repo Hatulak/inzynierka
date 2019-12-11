@@ -2,8 +2,10 @@ package controllers;
 
 import controllers.runnable.ExperimentRunnable;
 import database.model.Experiment;
+import database.model.Result;
 import database.model.Status;
 import database.repository.ExperimentRepository;
+import database.repository.ResultRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,8 +19,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import viewmodel.ExperimentTableRow;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -103,6 +107,7 @@ public class MainWindowController {
                     } else {
                         final Button startButton = new Button(resources.getString("experiment.action.start"));
                         final Button editButton = new Button(resources.getString("experiment.action.edit"));
+                        final Button deleteButton = new Button(resources.getString("experiment.action.delete"));
 
                         startButton.setOnAction(e -> {
                             ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
@@ -115,7 +120,13 @@ public class MainWindowController {
                             Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
                             editExperiment(experiment);
                         });
-                        HBox hbox = new HBox(startButton, editButton);
+                        deleteButton.setOnAction(e -> {
+                            ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
+                            deleteExperiment(experiment);
+                            refeshExperimentList();
+                        });
+                        HBox hbox = new HBox(startButton, editButton, deleteButton);
                         hbox.setSpacing(5);
                         setGraphic(hbox);
                         setText(null);
@@ -155,6 +166,25 @@ public class MainWindowController {
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
 
+    }
+
+    private void deleteExperiment(Experiment experiment) {
+        try {
+            FileUtils.deleteDirectory(new File(experiment.getOptionsFilePath()).getParentFile());
+            List<Result> byExperimentId = ResultRepository.findByExperimentId(experiment.getId());
+            if (byExperimentId.size() > 0)
+                FileUtils.deleteDirectory(new File(byExperimentId.get(0).getOptionsFilePath()).getParentFile().getParentFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ExperimentRepository.delete(experiment);
+        for (ExperimentTableRow experimentTableRow : experimentsObservableList) {
+            if (experimentTableRow.getId() == experiment.getId()) {
+                experimentsObservableList.remove(experimentTableRow);
+                break;
+            }
+        }
     }
 
     private void editExperiment(Experiment experiment) {
@@ -250,5 +280,8 @@ public class MainWindowController {
         return experimentsObservableList;
     }
 
+    public void shutdown() {
+        executorService.shutdownNow();
+    }
 }
 

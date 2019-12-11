@@ -106,8 +106,8 @@ public class ResultsListWindowController {
     }
 
     public void init() {
-        ResultRepository.findByExperimentId(experiment.getId()).forEach(result -> resultTableRowObservableList.add(new ResultTableRow(result.getId(), result.getBeginningDate(), result.getEndingDate())));
-
+        ResultRepository.findByExperimentId(experiment.getId())
+                .forEach(result -> resultTableRowObservableList.add(new ResultTableRow(result.getId(), result.getBeginningDate(), result.getEndingDate())));
     }
 
     public void setExperiment(Experiment experiment) {

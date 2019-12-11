@@ -37,4 +37,11 @@ public class ExperimentRepository {
         return experiment;
     }
 
+    public static void delete(Experiment experiment) {
+        em.getTransaction().begin();
+        ResultRepository.deleteByExperimentId(experiment.getId());
+        em.remove(experiment);
+        em.getTransaction().commit();
+    }
+
 }

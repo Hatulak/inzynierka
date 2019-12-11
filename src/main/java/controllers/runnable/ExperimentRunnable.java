@@ -8,6 +8,7 @@ import database.repository.ExperimentRepository;
 import database.repository.ResultRepository;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import utils.CommonConstants;
 import viewmodel.ExperimentTableRow;
 
@@ -67,6 +68,15 @@ public class ExperimentRunnable implements Runnable {
         try {
             FileWriter fileWriter = new FileWriter(outputFile);
             while ((line = reader.readLine()) != null) {
+                if (Thread.currentThread().isInterrupted()) {
+                    //CHECK IF THREAD IS INTERRUPTED (CANCEL TASK)
+                    fileWriter.close();
+                    FileUtils.deleteDirectory(new File(result.getOptionsFilePath()).getParentFile());
+                    experiment.setStatus(Status.CANCELLED);
+                    ExperimentRepository.merge(experiment);
+                    ResultRepository.delete(result);
+                    return;
+                }
                 os.write('\n');
                 System.out.println(line);
                 fileWriter.write(line + "\n");
@@ -94,7 +104,6 @@ public class ExperimentRunnable implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private Result prepareResultEntity() {

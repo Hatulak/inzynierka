@@ -42,4 +42,18 @@ public class ResultRepository {
         return (List<Result>) q.setParameter("id", id).getResultList();
     }
 
+    public static void delete(Result result) {
+        em.getTransaction().begin();
+        em.remove(result);
+        em.getTransaction().commit();
+    }
+
+    private static void remove(Result result) {
+        em.remove(result);
+    }
+
+    public static void deleteByExperimentId(long id) {
+        findByExperimentId(id).forEach(ResultRepository::remove);
+    }
+
 }
