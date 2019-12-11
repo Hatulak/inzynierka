@@ -104,12 +104,12 @@ public class ExperimentRunnable implements Runnable {
                 .build());
         try {
             String optionsFilePath = System.getProperty("user.home") + "\\MRISimulatorDB\\out\\" + experiment.getId() + "\\"
-                    + result.getId() + "\\" + "options_" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT;
+                    + result.getId() + "\\" + CommonConstants.OPTIONS + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT;
             File optionsFile = new File(optionsFilePath);
             optionsFile.getParentFile().mkdirs();
 
             Path copy = Files.copy(Paths.get(Paths.get(experiment.getOptionsFilePath()).toFile().getAbsolutePath()),
-                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + "options_" + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT));
+                    Paths.get(optionsFile.getParentFile().getAbsolutePath() + "\\" + CommonConstants.OPTIONS + experiment.getName() + "_" + experiment.getId() + "_" + result.getId() + CommonConstants.TXT));
             optionsFile = new File(copy.toAbsolutePath().toString());
             ResourceBundle parameters = ResourceBundle.getBundle("bundles.experiment_parameters");
             FileWriter fileWriter = new FileWriter(optionsFile, true);

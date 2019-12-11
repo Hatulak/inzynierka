@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
+import utils.CommonConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -164,36 +166,134 @@ public class ResultsWindowController {
 
     @FXML
     public void saveOptionsFile(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(CommonConstants.OPTIONS + experiment.getName() + "_" + result.getId() + CommonConstants.TXT);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.write(fileToSave.toPath(), mriOptionsFileTextArea.getText().getBytes());
+            } catch (IOException e) {
+                log.error("Error during OptionsFile saving, file path:" + result.getOptionsFilePath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveProgramOutput(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(CommonConstants.OUTPUT + experiment.getName() + "_" + result.getId() + CommonConstants.TXT);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.write(fileToSave.toPath(), programOutputTextArea.getText().getBytes());
+            } catch (IOException e) {
+                log.error("Error during ProgramOutput saving, file path:" + result.getMriOutputFilePath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveImageAmpTxt(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(experiment.getName() + "_" + result.getId() + CommonConstants.IMAGE_AMP_TXT + CommonConstants.TXT);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.write(fileToSave.toPath(), imageAmpTextArea.getText().getBytes());
+            } catch (IOException e) {
+                log.error("Error during ImageAmpTxt saving, file path:" + result.getOutputImageAmpTxtPath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveImageAmpBmp(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(experiment.getName() + "_" + result.getId() + CommonConstants.IMAGE_AMP_BMP + CommonConstants.SLICE_BMP);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.copy(Paths.get(result.getOutputImageAmpBmpPath()), Paths.get(fileToSave.getAbsolutePath()));
+            } catch (IOException e) {
+                log.error("Error during ImageAmpBmp saving, file path:" + result.getOutputImageAmpBmpPath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveImagePhaseBmp(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("BMP files (*.bmp)", "*.bmp");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(experiment.getName() + "_" + result.getId() + CommonConstants.IMAGE_PHASE_BMP + CommonConstants.SLICE_BMP);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.copy(Paths.get(result.getOutputImagePhaseBmpPath()), Paths.get(fileToSave.getAbsolutePath()));
+            } catch (IOException e) {
+                log.error("Error during ImagePhaseBmp saving, file path:" + result.getOutputImagePhaseBmpPath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveKspaceReTxt(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(experiment.getName() + "_" + result.getId() + CommonConstants.KSPACE_RE_TXT + CommonConstants.TXT);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.write(fileToSave.toPath(), kSpaceReTextArea.getText().getBytes());
+            } catch (IOException e) {
+                log.error("Error during KspaceReTxt saving, file path:" + result.getOutputKSpaceRePath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void saveKspaceImTxt(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setInitialFileName(experiment.getName() + "_" + result.getId() + CommonConstants.KSPACE_IM_TXT + CommonConstants.TXT);
 
+        File fileToSave = fileChooser.showSaveDialog(null);
+
+        if (fileToSave != null) {
+            try {
+                Files.write(fileToSave.toPath(), kSpaceImTextArea.getText().getBytes());
+            } catch (IOException e) {
+                log.error("Error during KspaceImTxt saving, file path:" + result.getOutputKSpaceImPath() + " FileToSave Path: " + fileToSave.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 package utils;
 
 public class CommonConstants {
-
+    public static final String OPTIONS = "options_";
     public static final String DESC_TXT = "_desc.txt";
     public static final String FLOW_TXT = "_flow.txt";
     public static final String TYPE_TXT = "_type.txt";
@@ -12,4 +12,5 @@ public class CommonConstants {
     public static final String IMAGE_PHASE_BMP = "_imagePhase";
     public static final String TXT = ".txt";
     public static final String SLICE_BMP = "_(001 slice).bmp";
+    public static final String OUTPUT = "program_output_";
 }

@@ -253,7 +253,7 @@ public class NewExperimentWindowController {
 
     private String createOptionsFile(Long id) {
         String path = System.getProperty("user.home") + "\\MRISimulatorDB\\in\\" + id + "\\"
-                + "options_" + newExperimentNameTextField.getText() + "_" + id + CommonConstants.TXT;
+                + CommonConstants.OPTIONS + newExperimentNameTextField.getText() + "_" + id + CommonConstants.TXT;
         File optionsFile = new File(path);
         optionsFile.getParentFile().mkdirs();
         try {
