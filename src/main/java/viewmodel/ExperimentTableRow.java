@@ -4,6 +4,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Button;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +18,10 @@ public class ExperimentTableRow {
     private StringProperty result;
     private StringProperty progress;
     private StringProperty creationDate;
+
+    private Button startButton;
+    private Button editButton;
+    private Button deleteButton;
 
     public ExperimentTableRow() {
     }
@@ -100,5 +105,24 @@ public class ExperimentTableRow {
 
     public void setCreationDate(String creationDate) {
         this.creationDate.set(creationDate);
+    }
+
+    public void setButtons(Button startButton, Button editButton, Button deleteButton) {
+        this.startButton = startButton;
+        this.editButton = editButton;
+        this.deleteButton = deleteButton;
+    }
+
+
+    public void disableButtons() {
+        startButton.setDisable(true);
+        editButton.setDisable(true);
+        deleteButton.setDisable(true);
+    }
+
+    public void enableButtons() {
+        startButton.setDisable(false);
+        editButton.setDisable(false);
+        deleteButton.setDisable(false);
     }
 }

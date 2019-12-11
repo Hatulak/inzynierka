@@ -203,6 +203,7 @@ public class NewExperimentWindowController {
         fileChooser.setTitle(messagesBundle.getString("new.experiment.load.file.with.options"));
         fileWithOptions = fileChooser.showOpenDialog(null);
         try {
+            if (fileWithOptions == null) return;
             List<String> fileLines = Files.readAllLines(Paths.get(fileWithOptions.getPath()));
             List<String> experimentParameters = getExperimentParametersFromBundle();
             for (String line : fileLines) {

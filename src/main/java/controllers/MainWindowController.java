@@ -109,8 +109,11 @@ public class MainWindowController {
                         final Button editButton = new Button(resources.getString("experiment.action.edit"));
                         final Button deleteButton = new Button(resources.getString("experiment.action.delete"));
 
+                        getTableView().getItems().get(getIndex()).setButtons(startButton, editButton, deleteButton);
+
                         startButton.setOnAction(e -> {
                             ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            experimentTableRow.disableButtons();
                             log.info("Starting task with id: " + experimentTableRow.getId());
                             Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
                             startProcessingExperiment(experiment);
@@ -126,6 +129,11 @@ public class MainWindowController {
                             deleteExperiment(experiment);
                             refeshExperimentList();
                         });
+
+                        if (getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.RUNNING))
+                                || getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.IN_QUEUE)))
+                            getTableView().getItems().get(getIndex()).disableButtons();
+                        else getTableView().getItems().get(getIndex()).enableButtons();
                         HBox hbox = new HBox(startButton, editButton, deleteButton);
                         hbox.setSpacing(5);
                         setGraphic(hbox);
@@ -229,6 +237,7 @@ public class MainWindowController {
         experiment.setStatus(Status.IN_QUEUE);
         ExperimentRepository.merge(experiment);
         refeshExperimentList();
+
         executorService.submit(new ExperimentRunnable(experiment, this));
     }
 

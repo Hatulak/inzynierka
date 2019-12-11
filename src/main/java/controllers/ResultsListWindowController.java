@@ -71,7 +71,6 @@ public class ResultsListWindowController {
                         actionButton.setOnAction(e -> {
                             ResultTableRow resultTableRow = getTableView().getItems().get(getIndex());
                             Result result = ResultRepository.findById(resultTableRow.getId());
-                            System.out.println(result.toString());
                             showResult(result);
                         });
                         setGraphic(actionButton);
@@ -107,7 +106,10 @@ public class ResultsListWindowController {
 
     public void init() {
         ResultRepository.findByExperimentId(experiment.getId())
-                .forEach(result -> resultTableRowObservableList.add(new ResultTableRow(result.getId(), result.getBeginningDate(), result.getEndingDate())));
+                .forEach(result -> {
+                    if (result.getEndingDate() != null)
+                        resultTableRowObservableList.add(new ResultTableRow(result.getId(), result.getBeginningDate(), result.getEndingDate()));
+                });
     }
 
     public void setExperiment(Experiment experiment) {
