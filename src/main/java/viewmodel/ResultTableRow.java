@@ -10,18 +10,18 @@ import java.util.Date;
 
 public class ResultTableRow {
     private LongProperty id;
-    private StringProperty beginnigDate;
+    private StringProperty beginningDate;
     private StringProperty endingDate;
     private StringProperty duration;
 
     public ResultTableRow() {
     }
 
-    public ResultTableRow(Long id, Date beginnigDate, Date endingDate) {
+    public ResultTableRow(Long id, Date beginningDate, Date endingDate) {
         this.id = new SimpleLongProperty(id);
-        this.beginnigDate = new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy HH:mm").format(beginnigDate));
+        this.beginningDate = new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy HH:mm").format(beginningDate));
         this.endingDate = new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy HH:mm").format(endingDate));
-        long diff = endingDate.getTime() - beginnigDate.getTime();
+        long diff = endingDate.getTime() - beginningDate.getTime();
         long diffSeconds = diff / 1000 % 60;
         long diffMinutes = diff / (60 * 1000) % 60;
         long diffHours = diff / (60 * 60 * 1000);
@@ -44,16 +44,16 @@ public class ResultTableRow {
         this.id.set(id);
     }
 
-    public String getBeginnigDate() {
-        return beginnigDate.get();
+    public String getBeginningDate() {
+        return beginningDate.get();
     }
 
-    public StringProperty beginnigDateProperty() {
-        return beginnigDate;
+    public StringProperty beginningDateProperty() {
+        return beginningDate;
     }
 
-    public void setBeginnigDate(String beginnigDate) {
-        this.beginnigDate.set(beginnigDate);
+    public void setBeginningDate(String beginningDate) {
+        this.beginningDate.set(beginningDate);
     }
 
     public String getEndingDate() {

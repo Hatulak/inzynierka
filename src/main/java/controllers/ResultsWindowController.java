@@ -2,6 +2,7 @@ package controllers;
 
 import database.model.Experiment;
 import database.model.Result;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -28,6 +29,9 @@ public class ResultsWindowController {
     private URL location;
 
     @FXML
+    public TextArea mriOptionsFileTextArea;
+
+    @FXML
     private TextArea programOutputTextArea;
 
     @FXML
@@ -50,12 +54,26 @@ public class ResultsWindowController {
     private Result result;
 
     public void init() {
+        initMriOptionsFileTextArea();
         initProgramOutputTextArea();
         initImageAmpTextArea();
         initKSpaceReTextArea();
         initKSpaceImTextArea();
         initImageAmpImageView();
         initImagePhaseImageView();
+    }
+
+    private void initMriOptionsFileTextArea() {
+        try {
+            List<String> strings = Files.readAllLines(Paths.get(result.getOptionsFilePath()));
+            StringBuilder string = new StringBuilder();
+            for (String s : strings)
+                string.append(s).append("\n");
+            mriOptionsFileTextArea.setText(string.toString());
+        } catch (IOException e) {
+            log.error("Error during MriOptionsFile loading, path:" + result.getOptionsFilePath());
+            e.printStackTrace();
+        }
     }
 
     private void initImagePhaseImageView() {
@@ -142,5 +160,40 @@ public class ResultsWindowController {
 
     public void setResult(Result result) {
         this.result = result;
+    }
+
+    @FXML
+    public void saveOptionsFile(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveProgramOutput(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveImageAmpTxt(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveImageAmpBmp(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveImagePhaseBmp(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveKspaceReTxt(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    public void saveKspaceImTxt(ActionEvent actionEvent) {
+
     }
 }
