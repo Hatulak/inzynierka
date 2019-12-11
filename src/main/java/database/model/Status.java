@@ -5,5 +5,6 @@ public enum Status {
     PROCESSING,
     IN_QUEUE,
     RUNNING,
-    DONE
+    DONE,
+    EDITED
 }

@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +91,7 @@ public class MainWindowController {
         tableColumnExperimentCreationDate.setCellValueFactory(new PropertyValueFactory<>("creationDate"));
 
 
-
+        //KOLUMNA ACTION
         Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> actionsCellFactory = param -> {
             return new TableCell<ExperimentTableRow, String>() {
                 @Override
@@ -100,14 +101,23 @@ public class MainWindowController {
                         setGraphic(null);
                         setText(null);
                     } else {
-                        final Button actionButton = new Button(resources.getString("experiment.action.start"));
-                        actionButton.setOnAction(e -> {
+                        final Button startButton = new Button(resources.getString("experiment.action.start"));
+                        final Button editButton = new Button(resources.getString("experiment.action.edit"));
+
+                        startButton.setOnAction(e -> {
                             ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
                             log.info("Starting task with id: " + experimentTableRow.getId());
                             Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
                             startProcessingExperiment(experiment);
                         });
-                        setGraphic(actionButton);
+                        editButton.setOnAction(e -> {
+                            ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
+                            editExperiment(experiment);
+                        });
+                        HBox hbox = new HBox(startButton, editButton);
+                        hbox.setSpacing(5);
+                        setGraphic(hbox);
                         setText(null);
                     }
                 }
@@ -115,6 +125,7 @@ public class MainWindowController {
         };
         tableColumnExperimentAction.setCellFactory(actionsCellFactory);
 
+        //KOLUMNA RESULTS
         Callback<TableColumn<ExperimentTableRow, String>, TableCell<ExperimentTableRow, String>> resultsCellFactory = param -> {
             return new TableCell<ExperimentTableRow, String>() {
                 @Override
@@ -144,6 +155,25 @@ public class MainWindowController {
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
 
+    }
+
+    private void editExperiment(Experiment experiment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/experiment_edition_window.fxml"), resources);
+            Parent root = loader.load();
+
+            ExperimentEditionWindowController experimentEditionWindowController = loader.getController();
+            experimentEditionWindowController.setMainWindowController(this);
+            experimentEditionWindowController.setExperiment(experiment);
+            experimentEditionWindowController.init();
+
+            Stage stage = new Stage();
+            stage.setTitle(resources.getString("experiment.edit"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showExperimentResults(Experiment experiment) {

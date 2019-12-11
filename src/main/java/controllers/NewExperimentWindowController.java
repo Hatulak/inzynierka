@@ -278,7 +278,7 @@ public class NewExperimentWindowController {
             fileWriter.write(parameters.getString("map.size.two") + " " + newExperimentMapSizeTreeTwoTextField.getText() + "\n");
             fileWriter.write(parameters.getString("map.size.three") + " " + newExperimentMapSizeTreeThreeTextField.getText() + "\n");
             fileWriter.write(parameters.getString("dimension") + " " + newExperimentDimensionTextField.getText() + "\n");
-            fileWriter.write("SIMULATE_MRI 1"); //TODO - TUTAJ UWAGA JEST HARDCODED
+            fileWriter.write("SIMULATE_MRI 1" + "\n"); //TODO - TUTAJ UWAGA JEST HARDCODED
             fileWriter.write(parameters.getString("mri.object") + " " + newExperimentMRIObjectTextField.getText() + "\n");
             fileWriter.write(parameters.getString("mri.object.file") + " " + optionsFile.getParentFile().getAbsolutePath() + "\\" + newExperimentNameTextField.getText() + "_" + id + "\n");
             fileWriter.write(parameters.getString("mri.method") + " " + newExperimentMRIMethodTextField.getText() + "\n");

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<AnchorPane prefHeight="444.0" prefWidth="737.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ExperimentEditionWindowController">
+
+
+    <children>
+        <TabPane prefHeight="389.0" prefWidth="737.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="%new.experiment.general.options">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="35.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.number.of.trees"/>
+                                <TextField fx:id="experimentNumberOfTreesTextField" layoutX="167.0" layoutY="31.0"/>
+                                <Label layoutX="14.0" layoutY="80.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.map.size"/>
+                                <TextField fx:id="experimentMapSizeTextField" layoutX="167.0" layoutY="76.0"/>
+                                <Label layoutX="14.0" layoutY="126.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.map.size.one"/>
+                                <TextField fx:id="experimentMapSizeTreeOneTextField" layoutX="167.0" layoutY="122.0"/>
+                                <Label layoutX="14.0" layoutY="175.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.map.size.two"/>
+                                <Label layoutX="14.0" layoutY="219.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.map.size.three"/>
+                                <TextField fx:id="experimentMapSizeTreeTwoTextField" layoutX="167.0" layoutY="171.0"/>
+                                <TextField fx:id="experimentMapSizeTreeThreeTextField" layoutX="167.0" layoutY="215.0"/>
+                                <Label layoutX="14.0" layoutY="266.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.general.options.dimension"/>
+                                <TextField fx:id="experimentDimensionTextField" layoutX="167.0" layoutY="262.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%new.experiment.mri.simulation">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <TextField fx:id="experimentMRIMethodTextField" layoutX="162.0" layoutY="73.0"/>
+                                <Line endX="191.0" layoutX="127.0" layoutY="31.0" startX="-112.0"/>
+                                <Label layoutX="15.0" layoutY="38.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence"/>
+                                <Line endX="191.0" layoutX="127.0" layoutY="62.0" startX="-112.0"/>
+                                <Label layoutX="15.0" layoutY="77.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.method"/>
+                                <Label layoutX="14.0" layoutY="109.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.dimension"/>
+                                <Label layoutX="14.0" layoutY="142.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.tr"/>
+                                <Label layoutX="15.0" layoutY="175.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.te"/>
+                                <Label layoutX="14.0" layoutY="213.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.acq.time"/>
+                                <Label layoutX="14.0" layoutY="247.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.fa"/>
+                                <TextField fx:id="experimentMRIDimensionTextField" layoutX="162.0" layoutY="105.0"/>
+                                <TextField fx:id="experimentTRTextField" layoutX="162.0" layoutY="138.0"/>
+                                <TextField fx:id="experimentTETextField" layoutX="162.0" layoutY="171.0"/>
+                                <TextField fx:id="experimentACQTimeTextField" layoutX="162.0" layoutY="209.0"/>
+                                <TextField fx:id="experimentFATextField" layoutX="162.0" layoutY="243.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%new.experiment.mri.simulation.sequence.rf.pulse.parameters">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="30.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.kind.of.rf.pulse"/>
+                                <TextField fx:id="experimentKindOfRfPulseTextField" layoutX="152.0" layoutY="26.0"/>
+                                <Label layoutX="14.0" layoutY="66.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.pulse.time"/>
+                                <TextField fx:id="experimentRfPulseTimeTextField" layoutX="152.0" layoutY="62.0"/>
+                                <Label layoutX="14.0" layoutY="101.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.pulse.n.of.lobes"/>
+                                <TextField fx:id="experimentRRfPulseNOfLobesTextField" layoutX="152.0" layoutY="97.0"/>
+                                <Label layoutX="14.0" layoutY="140.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.pulse.bw"/>
+                                <TextField fx:id="experimentRfPulseBwTextField" layoutX="152.0" layoutY="136.0"/>
+                                <Label layoutX="14.0" layoutY="177.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.pulse.points"/>
+                                <TextField fx:id="experimentRfPulsePointsTextField" layoutX="152.0" layoutY="173.0"/>
+                                <Label layoutX="14.0" layoutY="209.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.slice.sel.axis"/>
+                                <TextField fx:id="experimentRfSliceSelAxisTextField" layoutX="152.0" layoutY="205.0"/>
+                                <Label layoutX="14.0" layoutY="243.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.slice.sel.thickness"/>
+                                <TextField fx:id="experimentRfSliceSelThicknessTextField" layoutX="152.0"
+                                           layoutY="239.0"/>
+                                <Label layoutX="14.0" layoutY="278.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.slice.sel.fraction"/>
+                                <TextField fx:id="experimentRfSliceSelFractionTextField" layoutX="152.0"
+                                           layoutY="274.0"/>
+                                <Label layoutX="14.0" layoutY="313.0" prefHeight="17.0" prefWidth="138.0"
+                                       text="%new.experiment.mri.simulation.sequence.rf.slice.sel.gradient"/>
+                                <TextField fx:id="experimentRfSliceSelGradientTextField" layoutX="152.0"
+                                           layoutY="309.0"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%new.experiment.mri.flow.optimizations">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="66.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.change.rf.pulse.flow.step"/>
+                                <TextField fx:id="experimentChangeRfPulseFlowStepTextField" layoutX="206.0"
+                                           layoutY="62.0"/>
+                                <Label layoutX="14.0" layoutY="101.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.rf.pulse.flow.step.factor"/>
+                                <TextField fx:id="experimentRfPulseFlowStepFactorTextField" layoutX="206.0"
+                                           layoutY="97.0"/>
+                                <Label layoutX="14.0" layoutY="139.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.change.before.acq.flow.step"/>
+                                <TextField fx:id="experimentChangeBeforeACQFlowStepTextField" layoutX="206.0"
+                                           layoutY="135.0"/>
+                                <Label layoutX="14.0" layoutY="178.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.before.acq.flow.step.factor"/>
+                                <TextField fx:id="experimentBeforeACQFlowStepFactorTextField" layoutX="206.0"
+                                           layoutY="174.0"/>
+                                <Label layoutX="14.0" layoutY="218.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.change.after.acq.flow.step"/>
+                                <TextField fx:id="experimentChangeAfterACQFlowStepTextField" layoutX="206.0"
+                                           layoutY="214.0"/>
+                                <Label layoutX="14.0" layoutY="258.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations.after.acq.flow.step.factor"/>
+                                <TextField fx:id="experimentAfterACQFlowStepFactorTextField" layoutX="206.0"
+                                           layoutY="254.0"/>
+                                <Line endX="227.0" layoutX="482.0" layoutY="14.0" startX="-112.0"/>
+                                <Line endX="227.0" layoutX="482.0" layoutY="44.0" startX="-112.0"/>
+                                <Label layoutX="369.0" layoutY="66.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.simulation.sequence.flow.compensation.mri.flow.gmn.x"/>
+                                <TextField fx:id="experimentMRIFlowGmnXTextField" layoutX="561.0" layoutY="62.0"/>
+                                <Label layoutX="369.0" layoutY="103.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.simulation.sequence.flow.compensation.mri.flow.gmn.y"/>
+                                <TextField fx:id="experimentMRIFlowGmnYTextField" layoutX="561.0" layoutY="99.0"/>
+                                <Label layoutX="369.0" layoutY="141.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.simulation.sequence.flow.compensation.mri.flow.gmn.z"/>
+                                <TextField fx:id="experimentMRIFlowGmnZTextField" layoutX="561.0" layoutY="137.0"/>
+                                <Label layoutX="369.0" layoutY="180.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.simulation.sequence.flow.compensation.mri.flow.gmn.slice.sel"/>
+                                <TextField fx:id="experimentMRIFlowGmnSliceSelTextField" layoutX="561.0"
+                                           layoutY="176.0"/>
+                                <Label layoutX="369.0" layoutY="25.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.simulation.sequence.flow.compensation"/>
+                                <Line endX="227.0" layoutX="127.0" layoutY="14.0" startX="-112.0"/>
+                                <Line endX="227.0" layoutX="127.0" layoutY="44.0" startX="-112.0"/>
+                                <Label layoutX="14.0" layoutY="25.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.flow.optimizations"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="%new.experiment.mri.results">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="737.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="30.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.kspace.re.txt"/>
+                                <CheckBox fx:id="experimentWriteKspaceReTxtCheckBox" layoutX="206.0" layoutY="30.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="68.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.kspace.im.txt"/>
+                                <CheckBox fx:id="experimentWriteKspaceImTxtCheckBox" layoutX="206.0" layoutY="68.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="105.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.amp.txt"/>
+                                <CheckBox fx:id="experimentWriteImageAmpTxtCheckBox" layoutX="206.0" layoutY="105.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="146.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.amp.bmp"/>
+                                <CheckBox fx:id="experimentWriteImageAmpBmpCheckBox" layoutX="206.0" layoutY="146.0"
+                                          mnemonicParsing="false"/>
+                                <Label layoutX="14.0" layoutY="186.0" prefHeight="17.0" prefWidth="192.0"
+                                       text="%new.experiment.mri.results.write.image.phase.bmp"/>
+                                <CheckBox fx:id="experimentWriteImagePhaseBmpCheckBox" layoutX="206.0" layoutY="186.0"
+                                          mnemonicParsing="false"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <Button fx:id="experimentCancelButton" layoutX="643.0" layoutY="477.0" mnemonicParsing="false"
+                onAction="#cancel" prefHeight="25.0" prefWidth="80.0" text="%new.experiment.window.cancel"
+                AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+        <Button fx:id="experimentSaveButton" layoutX="549.0" layoutY="477.0" mnemonicParsing="false"
+                onAction="#saveExperiment" prefHeight="25.0" prefWidth="80.0" text="%new.experiment.window.save"
+                AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="100.0"/>
+        <Button fx:id="experimentResetButton" layoutX="14.0" layoutY="477.0" mnemonicParsing="false"
+                onAction="#resetData" prefHeight="25.0" prefWidth="160.0" text="%edit.experiment.reset"
+                AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"/>
+    </children>
+
+
+</AnchorPane>
