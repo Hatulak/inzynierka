@@ -8,10 +8,11 @@
             minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResultsWindowController">
     <children>
-        <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
-                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE"
+                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                 AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab text="%results.mri.options.file">
+                <Tab fx:id="optionsFileTab" text="%results.mri.options.file">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="563.0">
                             <children>
@@ -31,7 +32,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.program.output">
+                <Tab fx:id="programOutputTab" text="%results.program.output">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="563.0">
                             <children>
@@ -51,7 +52,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.image.amp.txt">
+                <Tab fx:id="imageAmpTxtTab" text="%results.image.amp.txt">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -70,7 +71,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.image.amp.bmp">
+                <Tab fx:id="imageAmpBmpTab" text="%results.image.amp.bmp">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -84,7 +85,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.image.phase">
+                <Tab fx:id="imagePhaseTab" text="%results.image.phase">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -98,7 +99,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.kspace.re.txt">
+                <Tab fx:id="kspaceReTab" text="%results.kspace.re.txt">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -117,7 +118,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="%results.kspace.im.txt">
+                <Tab fx:id="kspaceImTab" text="%results.kspace.im.txt">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>

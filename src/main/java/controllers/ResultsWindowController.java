@@ -4,6 +4,8 @@ import database.model.Experiment;
 import database.model.Result;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -51,6 +55,30 @@ public class ResultsWindowController {
     @FXML
     private TextArea kSpaceImTextArea;
 
+    @FXML
+    public Tab kspaceImTab;
+
+    @FXML
+    public Tab kspaceReTab;
+
+    @FXML
+    public Tab imagePhaseTab;
+
+    @FXML
+    public Tab imageAmpBmpTab;
+
+    @FXML
+    public Tab imageAmpTxtTab;
+
+    @FXML
+    public Tab programOutputTab;
+
+    @FXML
+    public Tab optionsFileTab;
+
+    @FXML
+    public TabPane tabPane;
+
     private MainWindowController mainWindowController;
     private Experiment experiment;
     private Result result;
@@ -74,7 +102,9 @@ public class ResultsWindowController {
             mriOptionsFileTextArea.setText(string.toString());
         } catch (IOException e) {
             log.error("Error during MriOptionsFile loading, path:" + result.getOptionsFilePath());
+            log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
+            tabPane.getTabs().remove(optionsFileTab);
         }
     }
 
@@ -84,8 +114,8 @@ public class ResultsWindowController {
             Image read = new Image(fis, imagePhaseImageView.getFitWidth(), imagePhaseImageView.getFitHeight(), true, true);
             imagePhaseImageView.setImage(read);
         } catch (FileNotFoundException e) {
-            log.error("Error during ImagePhaseBmp loading, path:" + result.getOutputImagePhaseBmpPath());
-            e.printStackTrace();
+            log.info("File not found, it means, that checkbox for writing image phase bmp wasn't checked");
+            tabPane.getTabs().remove(imagePhaseTab);
         }
     }
 
@@ -95,8 +125,8 @@ public class ResultsWindowController {
             Image read = new Image(fis, imageAmpImageView.getFitWidth(), imageAmpImageView.getFitHeight(), true, true);
             imageAmpImageView.setImage(read);
         } catch (FileNotFoundException e) {
-            log.error("Error during ImageAmpBmp loading, path:" + result.getOutputImageAmpBmpPath());
-            e.printStackTrace();
+            log.info("File not found, it means, that checkbox for writing image amp bmp wasn't checked");
+            tabPane.getTabs().remove(imageAmpBmpTab);
         }
     }
 
@@ -107,8 +137,12 @@ public class ResultsWindowController {
             for (String s : strings)
                 string.append(s).append("\n");
             kSpaceReTextArea.setText(string.toString());
+        } catch (NoSuchFileException e) {
+            log.info("File not found, it means, that checkbox for writing kspace re txt wasn't checked");
+            tabPane.getTabs().remove(kspaceReTab);
         } catch (IOException e) {
             log.error("Error during KSpaceReFile loading, path:" + result.getOutputKSpaceRePath());
+            log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
         }
     }
@@ -120,8 +154,12 @@ public class ResultsWindowController {
             for (String s : strings)
                 string.append(s).append("\n");
             kSpaceImTextArea.setText(string.toString());
+        } catch (NoSuchFileException e) {
+            log.info("File not found, it means, that checkbox for writing kspace im txt wasn't checked");
+            tabPane.getTabs().remove(kspaceImTab);
         } catch (IOException e) {
             log.error("Error during KSpaceImFile loading, path:" + result.getOutputKSpaceImPath());
+            log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
         }
     }
@@ -133,8 +171,12 @@ public class ResultsWindowController {
             for (String s : strings)
                 string.append(s).append("\n");
             imageAmpTextArea.setText(string.toString());
+        } catch (NoSuchFileException e) {
+            log.info("File not found, it means, that checkbox for writing image amp txt wasn't checked");
+            tabPane.getTabs().remove(imageAmpTxtTab);
         } catch (IOException e) {
             log.error("Error during ImageAmpTxtFile loading, path:" + result.getOutputImageAmpTxtPath());
+            log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
         }
     }
@@ -148,7 +190,9 @@ public class ResultsWindowController {
             programOutputTextArea.setText(string.toString());
         } catch (IOException e) {
             log.error("Error during mriOutputFile loading, path:" + result.getMriOutputFilePath());
+            log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
+            tabPane.getTabs().remove(programOutputTab);
         }
     }
 
