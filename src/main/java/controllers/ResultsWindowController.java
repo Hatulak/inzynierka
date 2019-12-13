@@ -4,6 +4,7 @@ import database.model.Experiment;
 import database.model.Result;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -84,22 +85,32 @@ public class ResultsWindowController {
     private Result result;
 
     public void init() {
-        initMriOptionsFileTextArea();
-        initProgramOutputTextArea();
-        initImageAmpTextArea();
-        initKSpaceReTextArea();
-        initKSpaceImTextArea();
-        initImageAmpImageView();
-        initImagePhaseImageView();
+        try {
+            initMriOptionsFileTextArea();
+            initProgramOutputTextArea();
+            initImageAmpTextArea();
+            initKSpaceReTextArea();
+            initKSpaceImTextArea();
+            initImageAmpImageView();
+            initImagePhaseImageView();
+        } catch (NoSuchFieldException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(resources.getString("warning"));
+            alert.setHeaderText(resources.getString("warning.header"));
+            alert.setContentText(resources.getString("warning.context") + "\n" + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
-    private void initMriOptionsFileTextArea() {
+    private void initMriOptionsFileTextArea() throws NoSuchFieldException {
         try {
             List<String> strings = Files.readAllLines(Paths.get(result.getOptionsFilePath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             mriOptionsFileTextArea.setText(string.toString());
+        } catch (NoSuchFileException e) {
+            throw new NoSuchFieldException(e.getMessage());
         } catch (IOException e) {
             log.error("Error during MriOptionsFile loading, path:" + result.getOptionsFilePath());
             log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
@@ -108,7 +119,7 @@ public class ResultsWindowController {
         }
     }
 
-    private void initImagePhaseImageView() {
+    private void initImagePhaseImageView() throws NoSuchFieldException {
         try {
             FileInputStream fis = new FileInputStream(new File(result.getOutputImagePhaseBmpPath()));
             Image read = new Image(fis, imagePhaseImageView.getFitWidth(), imagePhaseImageView.getFitHeight(), true, true);
@@ -119,7 +130,7 @@ public class ResultsWindowController {
         }
     }
 
-    private void initImageAmpImageView() {
+    private void initImageAmpImageView() throws NoSuchFieldException {
         try {
             FileInputStream fis = new FileInputStream(new File(result.getOutputImageAmpBmpPath()));
             Image read = new Image(fis, imageAmpImageView.getFitWidth(), imageAmpImageView.getFitHeight(), true, true);
@@ -181,13 +192,15 @@ public class ResultsWindowController {
         }
     }
 
-    private void initProgramOutputTextArea() {
+    private void initProgramOutputTextArea() throws NoSuchFieldException {
         try {
             List<String> strings = Files.readAllLines(Paths.get(result.getMriOutputFilePath()));
             StringBuilder string = new StringBuilder();
             for (String s : strings)
                 string.append(s).append("\n");
             programOutputTextArea.setText(string.toString());
+        } catch (NoSuchFileException e) {
+            throw new NoSuchFieldException(e.getMessage());
         } catch (IOException e) {
             log.error("Error during mriOutputFile loading, path:" + result.getMriOutputFilePath());
             log.error(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
