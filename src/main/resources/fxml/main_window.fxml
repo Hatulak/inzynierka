@@ -3,45 +3,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="628.0" prefWidth="827.0" xmlns="http://javafx.com/javafx/8.0.171"
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
     <children>
-        <MenuBar layoutY="2.0" prefHeight="22.0" prefWidth="827.0" AnchorPane.leftAnchor="0.0"
-                 AnchorPane.rightAnchor="0.0">
-            <menus>
-                <Menu mnemonicParsing="false" text="%menubar.file">
-                    <items>
-                        <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false"
-                                  onAction="#openNewExperimentWindow" text="%menubar.new.experiment"/>
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <Label layoutX="49.0" layoutY="27.0" prefHeight="48.0" prefWidth="283.0" text="%main.window.experiments.list"
-               AnchorPane.leftAnchor="49.0" AnchorPane.rightAnchor="495.0">
-            <font>
-                <Font size="20.0"/>
-            </font>
-        </Label>
-        <ScrollPane layoutY="75.0" prefHeight="553.0" prefWidth="827.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0">
-            <content>
-                <TableView fx:id="tableExperiments" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                           prefHeight="554.0" prefWidth="823.0">
-                    <columns>
-                        <TableColumn fx:id="tableColumnExperimentId" prefWidth="31.0" text="%experiment.id"/>
-                        <TableColumn fx:id="tableColumnExperimentCreationDate" prefWidth="98.0"
-                                     text="%expeiment.creation.date"/>
-                        <TableColumn fx:id="tableColumnExperimentName" prefWidth="244.0" text="%experiment.name"/>
-                        <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="78.0"
-                                     text="%experiment.status"/>
-                        <TableColumn fx:id="tableColumnExperimentProgress" prefWidth="58.0"
-                                     text="%experiment.progress"/>
-                        <TableColumn fx:id="tableColumnExperimentAction" prefWidth="155.0" text="%experiment.action"/>
-                        <TableColumn fx:id="tableColumnExperimentResults" prefWidth="59.0" text="%experiment.results"/>
-                    </columns>
-                </TableView>
-            </content>
-        </ScrollPane>
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <MenuBar prefHeight="22.0" prefWidth="827.0">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="%menubar.file">
+                            <items>
+                                <MenuItem fx:id="menuItemNewExperiment" mnemonicParsing="false"
+                                          onAction="#openNewExperimentWindow" text="%menubar.new.experiment"/>
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <Label prefHeight="48.0" prefWidth="283.0" text="%main.window.experiments.list">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <TableView fx:id="tableExperiments" maxHeight="1.7976931348623157E308"
+                                   maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="tableColumnExperimentId" maxWidth="-Infinity" minWidth="40.0"
+                                             prefWidth="-1.0" text="%experiment.id"/>
+                                <TableColumn fx:id="tableColumnExperimentCreationDate" prefWidth="89.0"
+                                             text="%expeiment.creation.date"/>
+                                <TableColumn fx:id="tableColumnExperimentName" prefWidth="244.0"
+                                             text="%experiment.name"/>
+                                <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="78.0"
+                                             text="%experiment.status"/>
+                                <TableColumn fx:id="tableColumnExperimentProgress" prefWidth="58.0"
+                                             text="%experiment.progress"/>
+                                <TableColumn fx:id="tableColumnExperimentAction" prefWidth="155.0"
+                                             text="%experiment.action"/>
+                                <TableColumn fx:id="tableColumnExperimentResults" prefWidth="59.0"
+                                             text="%experiment.results"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
     </children>
 </AnchorPane>

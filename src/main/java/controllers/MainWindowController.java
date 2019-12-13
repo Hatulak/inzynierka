@@ -208,6 +208,7 @@ public class MainWindowController {
             Stage stage = new Stage();
             stage.setTitle(resources.getString("experiment.edit"));
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -227,6 +228,8 @@ public class MainWindowController {
             Stage stage = new Stage();
             stage.setTitle(resources.getString("experiment.results"));
             stage.setScene(new Scene(root));
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -267,6 +270,7 @@ public class MainWindowController {
             Stage stage = new Stage();
             stage.setTitle(resources.getString("new.experiment.title"));
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

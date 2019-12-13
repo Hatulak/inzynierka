@@ -22,6 +22,8 @@ public class Main extends Application {
         primaryStage.setTitle(resourceBundle.getString("main.window.title"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setOnHidden(event -> mainWindowController.shutdown());
+        primaryStage.setMinHeight(500);
+        primaryStage.setMinWidth(800);
         primaryStage.show();
     }
 

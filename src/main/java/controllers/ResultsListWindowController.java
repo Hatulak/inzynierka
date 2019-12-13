@@ -98,6 +98,8 @@ public class ResultsListWindowController {
             Stage stage = new Stage();
             stage.setTitle(resources.getString("experiment.results"));
             stage.setScene(new Scene(root));
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
