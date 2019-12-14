@@ -22,6 +22,7 @@ public class ExperimentTableRow {
     private Button startButton;
     private Button editButton;
     private Button deleteButton;
+    private Button cancelButton;
 
     public ExperimentTableRow() {
     }
@@ -107,10 +108,11 @@ public class ExperimentTableRow {
         this.creationDate.set(creationDate);
     }
 
-    public void setButtons(Button startButton, Button editButton, Button deleteButton) {
+    public void setButtons(Button startButton, Button editButton, Button deleteButton, Button cancelButton) {
         this.startButton = startButton;
         this.editButton = editButton;
         this.deleteButton = deleteButton;
+        this.cancelButton = cancelButton;
     }
 
 
@@ -124,5 +126,13 @@ public class ExperimentTableRow {
         startButton.setDisable(false);
         editButton.setDisable(false);
         deleteButton.setDisable(false);
+    }
+
+    public void disableCancel() {
+        cancelButton.setDisable(true);
+    }
+
+    public void enableCancel() {
+        cancelButton.setDisable(false);
     }
 }

@@ -70,11 +70,16 @@ public class ExperimentRunnable implements Runnable {
             while ((line = reader.readLine()) != null) {
                 if (Thread.currentThread().isInterrupted()) {
                     //CHECK IF THREAD IS INTERRUPTED (PROGRAM EXIT)
+                    process.destroy();
                     fileWriter.close();
                     FileUtils.deleteDirectory(new File(result.getOptionsFilePath()).getParentFile());
+                    ResultRepository.delete(result);
                     experiment.setStatus(Status.CANCELLED);
                     ExperimentRepository.merge(experiment);
-                    ResultRepository.delete(result);
+                    System.out.println("here");
+                    experimentTR.enableButtons();
+                    experimentTR.disableCancel();
+                    mainWindowController.refeshExperimentList();
                     return;
                 }
                 os.write('\n');
@@ -91,6 +96,7 @@ public class ExperimentRunnable implements Runnable {
                     int endIndex = Integer.parseInt(split[1]);
                     experimentsList.remove(experimentTR);
                     experimentTR.disableButtons();
+                    experimentTR.enableCancel();
                     experimentTR.setProgress(currentIndex + "\\" + endIndex);
                     experimentsList.add(experimentTR);
                 }
@@ -101,6 +107,7 @@ public class ExperimentRunnable implements Runnable {
             experiment.setStatus(Status.DONE);
             ExperimentRepository.merge(experiment);
             experimentTR.enableButtons();
+            experimentTR.disableCancel();
             mainWindowController.refeshExperimentList();
         } catch (IOException e) {
             e.printStackTrace();

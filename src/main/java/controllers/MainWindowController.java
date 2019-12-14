@@ -25,11 +25,10 @@ import viewmodel.ExperimentTableRow;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Slf4j
 public class MainWindowController {
@@ -73,6 +72,7 @@ public class MainWindowController {
     private ObservableList<ExperimentTableRow> experimentsObservableList = FXCollections.observableArrayList();
 
     private ExecutorService executorService;
+    private Map<Long, Future> submittedTasks = new HashMap<>();
 
     @FXML
     void initialize() {
@@ -108,8 +108,9 @@ public class MainWindowController {
                         final Button startButton = new Button(resources.getString("experiment.action.start"));
                         final Button editButton = new Button(resources.getString("experiment.action.edit"));
                         final Button deleteButton = new Button(resources.getString("experiment.action.delete"));
+                        final Button cancelButton = new Button(resources.getString("experiment.action.cancel"));
 
-                        getTableView().getItems().get(getIndex()).setButtons(startButton, editButton, deleteButton);
+                        getTableView().getItems().get(getIndex()).setButtons(startButton, editButton, deleteButton, cancelButton);
 
                         startButton.setOnAction(e -> {
                             ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
@@ -129,12 +130,23 @@ public class MainWindowController {
                             deleteExperiment(experiment);
                             refeshExperimentList();
                         });
+                        cancelButton.setOnAction(e -> {
+                            ExperimentTableRow experimentTableRow = getTableView().getItems().get(getIndex());
+                            Experiment experiment = ExperimentRepository.findById(experimentTableRow.getId());
+                            experimentTableRow.disableCancel();
+                            cancelExperiment(experiment);
+                        });
 
                         if (getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.RUNNING))
-                                || getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.IN_QUEUE)))
+                                || getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
+
                             getTableView().getItems().get(getIndex()).disableButtons();
-                        else getTableView().getItems().get(getIndex()).enableButtons();
-                        HBox hbox = new HBox(startButton, editButton, deleteButton);
+                            getTableView().getItems().get(getIndex()).enableCancel();
+                        } else {
+                            getTableView().getItems().get(getIndex()).enableButtons();
+                            getTableView().getItems().get(getIndex()).disableCancel();
+                        }
+                        HBox hbox = new HBox(startButton, editButton, deleteButton, cancelButton);
                         hbox.setSpacing(5);
                         setGraphic(hbox);
                         setText(null);
@@ -174,6 +186,15 @@ public class MainWindowController {
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
 
+    }
+
+    private void cancelExperiment(Experiment experiment) {
+        Future future = submittedTasks.get(experiment.getId());
+        if (future != null)
+            if (future.isDone() || future.isCancelled()) submittedTasks.remove(experiment.getId());
+            else System.out.println("???");
+        submittedTasks.get(experiment.getId()).cancel(true);
+        submittedTasks.remove(submittedTasks.get(experiment.getId()));
     }
 
     private void deleteExperiment(Experiment experiment) {
@@ -241,11 +262,11 @@ public class MainWindowController {
         ExperimentRepository.merge(experiment);
         refeshExperimentList();
 
-        executorService.submit(new ExperimentRunnable(experiment, this));
+        Future<?> submit = executorService.submit(new ExperimentRunnable(experiment, this));
+        submittedTasks.put(experiment.getId(), submit);
     }
 
     public void refeshExperimentList() {
-//        experimentsObservableList.clear();
         ExperimentRepository.getAll().forEach(e -> {
             for (ExperimentTableRow experimentTableRow : experimentsObservableList) {
                 if (experimentTableRow.getId() == e.getId()) {
@@ -253,9 +274,7 @@ public class MainWindowController {
                     experimentTableRow.setStatus(e.getStatus().toString());
                 }
             }
-//            experimentsObservableList.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), ""));
         });
-
     }
 
     @FXML
