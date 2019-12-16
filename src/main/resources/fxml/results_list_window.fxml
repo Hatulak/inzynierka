@@ -9,13 +9,16 @@
         <TableView fx:id="tableViewResults" layoutX="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0"
                    AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
             <columns>
-                <TableColumn fx:id="tableColumnResultId" prefWidth="37.0" text="%results.list.window.id"/>
-                <TableColumn fx:id="tableColumnResultBeginningDate" prefWidth="113.0"
+                <TableColumn fx:id="tableColumnResultId" prefWidth="${tableViewResults.width*0.1}"
+                             text="%results.list.window.id"/>
+                <TableColumn fx:id="tableColumnResultBeginningDate" prefWidth="${tableViewResults.width*0.22}"
                              text="%results.list.window.beginning.date"/>
-                <TableColumn fx:id="tableColumnResultEndingDate" prefWidth="121.0"
+                <TableColumn fx:id="tableColumnResultEndingDate" prefWidth="${tableViewResults.width*0.22}"
                              text="%results.list.window.ending.date"/>
-                <TableColumn fx:id="tableColumnResultDuration" prefWidth="75.0" text="%results.list.window.time"/>
-                <TableColumn fx:id="tableColumnResultResults" prefWidth="71.0" text="%results.list.window.results"/>
+                <TableColumn fx:id="tableColumnResultDuration" prefWidth="${tableViewResults.width*0.2}"
+                             text="%results.list.window.time"/>
+                <TableColumn fx:id="tableColumnResultResults" prefWidth="${tableViewResults.width*0.1}"
+                             text="%results.list.window.results"/>
             </columns>
         </TableView>
     </children>

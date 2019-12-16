@@ -30,20 +30,21 @@
                         <TableView fx:id="tableExperiments" maxHeight="1.7976931348623157E308"
                                    maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="tableColumnExperimentId" maxWidth="-Infinity" minWidth="40.0"
-                                             prefWidth="-1.0" text="%experiment.id"/>
-                                <TableColumn fx:id="tableColumnExperimentCreationDate" prefWidth="89.0"
+                                <TableColumn fx:id="tableColumnExperimentId" prefWidth="${tableExperiments.width*0.07}"
+                                             text="%experiment.id"/>
+                                <TableColumn fx:id="tableColumnExperimentCreationDate"
+                                             prefWidth="${tableExperiments.width*0.14}"
                                              text="%expeiment.creation.date"/>
-                                <TableColumn fx:id="tableColumnExperimentName" prefWidth="244.0"
-                                             text="%experiment.name"/>
-                                <TableColumn fx:id="tableColumnExperimentStatus" minWidth="5.0" prefWidth="78.0"
-                                             text="%experiment.status"/>
-                                <TableColumn fx:id="tableColumnExperimentProgress" prefWidth="58.0"
-                                             text="%experiment.progress"/>
-                                <TableColumn fx:id="tableColumnExperimentAction" prefWidth="155.0"
-                                             text="%experiment.action"/>
-                                <TableColumn fx:id="tableColumnExperimentResults" prefWidth="59.0"
-                                             text="%experiment.results"/>
+                                <TableColumn fx:id="tableColumnExperimentName"
+                                             prefWidth="${tableExperiments.width*0.23}" text="%experiment.name"/>
+                                <TableColumn fx:id="tableColumnExperimentStatus"
+                                             prefWidth="${tableExperiments.width*0.09}" text="%experiment.status"/>
+                                <TableColumn fx:id="tableColumnExperimentProgress"
+                                             prefWidth="${tableExperiments.width*0.1}" text="%experiment.progress"/>
+                                <TableColumn fx:id="tableColumnExperimentAction"
+                                             prefWidth="${tableExperiments.width*0.27}" text="%experiment.action"/>
+                                <TableColumn fx:id="tableColumnExperimentResults"
+                                             prefWidth="${tableExperiments.width*0.09}" text="%experiment.results"/>
                             </columns>
                         </TableView>
                     </children>
