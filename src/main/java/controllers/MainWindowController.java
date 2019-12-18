@@ -26,9 +26,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class MainWindowController {
@@ -71,7 +72,7 @@ public class MainWindowController {
 
     private ObservableList<ExperimentTableRow> experimentsObservableList = FXCollections.observableArrayList();
 
-    private ExecutorService executorService;
+    private ThreadPoolExecutor executorService;
     private Map<Long, Future> submittedTasks = new HashMap<>();
 
     @FXML
@@ -137,11 +138,12 @@ public class MainWindowController {
                             cancelExperiment(experiment);
                         });
 
-                        if (getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.RUNNING))
-                                || getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
-
+                        if (getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.RUNNING))) {
                             getTableView().getItems().get(getIndex()).disableButtons();
                             getTableView().getItems().get(getIndex()).enableCancel();
+                        } else if (getTableView().getItems().get(getIndex()).getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
+                            getTableView().getItems().get(getIndex()).disableButtons();
+                            getTableView().getItems().get(getIndex()).disableCancel();
                         } else {
                             getTableView().getItems().get(getIndex()).enableButtons();
                             getTableView().getItems().get(getIndex()).disableCancel();
@@ -180,8 +182,7 @@ public class MainWindowController {
         };
         tableColumnExperimentResults.setCellFactory(resultsCellFactory);
 
-
-        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+        executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() - 1, Runtime.getRuntime().availableProcessors() - 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
@@ -189,12 +190,14 @@ public class MainWindowController {
     }
 
     private void cancelExperiment(Experiment experiment) {
-        Future future = submittedTasks.get(experiment.getId());
+        Future future = getSubmittedTask(experiment.getId());
         if (future != null)
-            if (future.isDone() || future.isCancelled()) submittedTasks.remove(experiment.getId());
-            else System.out.println("???");
-        submittedTasks.get(experiment.getId()).cancel(true);
-        submittedTasks.remove(submittedTasks.get(experiment.getId()));
+            if (future.isDone() || future.isCancelled()) {
+                removeSubmittedTask(experiment.getId());
+                return;
+            } else System.out.println("???");
+        getSubmittedTask(experiment.getId()).cancel(true); //fixme - tutaj cos wywala
+        removeSubmittedTask(experiment.getId());
     }
 
     private void deleteExperiment(Experiment experiment) {
@@ -258,12 +261,13 @@ public class MainWindowController {
     }
 
     private void startProcessingExperiment(Experiment experiment) {
+        log.info("Adding experiment: " + experiment.getId() + " to queue");
         experiment.setStatus(Status.IN_QUEUE);
         ExperimentRepository.merge(experiment);
         refeshExperimentList();
 
         Future<?> submit = executorService.submit(new ExperimentRunnable(experiment, this));
-        submittedTasks.put(experiment.getId(), submit);
+        putSubmittedTask(experiment.getId(), submit);
     }
 
     public void refeshExperimentList() {
@@ -272,6 +276,10 @@ public class MainWindowController {
                 if (experimentTableRow.getId() == e.getId()) {
                     experimentTableRow.setName(e.getName());
                     experimentTableRow.setStatus(e.getStatus().toString());
+                    if (experimentTableRow.getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
+                        experimentTableRow.disableCancel();
+                        experimentTableRow.disableButtons();
+                    }
                 }
             }
         });
@@ -312,7 +320,33 @@ public class MainWindowController {
         return experimentsObservableList;
     }
 
+    public synchronized Map<Long, Future> getSubmittedTasks() {
+        return submittedTasks;
+    }
+
+    public synchronized Future getSubmittedTask(Long experimentId) {
+        return submittedTasks.get(experimentId);
+    }
+
+    public synchronized void removeSubmittedTask(Long experimentId) {
+        submittedTasks.remove(experimentId);
+    }
+
+    public synchronized void putSubmittedTask(Long experimentId, Future future) {
+        submittedTasks.put(experimentId, future);
+    }
+
+
     public void shutdown() {
+        List<Runnable> queueList = new LinkedList<>();
+        executorService.getQueue().drainTo(queueList);
+        experimentsObservableList.forEach(tr -> {
+            if (tr.getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
+                Experiment byId = ExperimentRepository.findById(tr.getId());
+                byId.setStatus(Status.CANCELLED);
+                ExperimentRepository.merge(byId);
+            }
+        });
         executorService.shutdownNow();
     }
 }

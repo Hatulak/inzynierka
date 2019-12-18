@@ -12,7 +12,7 @@
             <property name="hibernate.connection.url" value="jdbc:h2:file:~/MRISimulatorDB/MRIDB"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>

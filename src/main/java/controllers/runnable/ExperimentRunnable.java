@@ -32,6 +32,7 @@ public class ExperimentRunnable implements Runnable {
 
     @Override
     public void run() {
+        log.info("Experiment: " + experiment.getId() + " started simulation");
         Result result = prepareResultEntity();
         experiment.setStatus(Status.RUNNING);
         ExperimentRepository.merge(experiment);
@@ -53,8 +54,8 @@ public class ExperimentRunnable implements Runnable {
             log.error("Error during file creation, experiment id: " + experiment.getId() + " result id: " + result.getId());
             e.printStackTrace();
         }
-        ProcessBuilder builder = new ProcessBuilder("lbm.exe", result.getOptionsFilePath())
-                .directory(new File(System.getProperty("user.home") + "\\MRISimulatorDB"));
+        ProcessBuilder builder = new ProcessBuilder(System.getProperty("user.home") + "\\MRISimulatorDB\\" + "lbm.exe", result.getOptionsFilePath());
+//                .directory(new File(System.getProperty("user.home") + "\\MRISimulatorDB"));
         Process process = null;
         try {
             process = builder.start();
@@ -76,7 +77,6 @@ public class ExperimentRunnable implements Runnable {
                     ResultRepository.delete(result);
                     experiment.setStatus(Status.CANCELLED);
                     ExperimentRepository.merge(experiment);
-                    System.out.println("here");
                     experimentTR.enableButtons();
                     experimentTR.disableCancel();
                     mainWindowController.refeshExperimentList();
@@ -108,6 +108,7 @@ public class ExperimentRunnable implements Runnable {
             ExperimentRepository.merge(experiment);
             experimentTR.enableButtons();
             experimentTR.disableCancel();
+            mainWindowController.removeSubmittedTask(experiment.getId());
             mainWindowController.refeshExperimentList();
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,5 +170,9 @@ public class ExperimentRunnable implements Runnable {
         ResultRepository.merge(result);
 
         return ResultRepository.findById(result.getId());
+    }
+
+    public Experiment getExperiment() {
+        return experiment;
     }
 }

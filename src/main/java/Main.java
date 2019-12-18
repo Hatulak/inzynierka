@@ -4,10 +4,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
+@Slf4j
 public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
@@ -27,8 +29,13 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) throws IOException {
-        launch(args);
+    public static void main(String[] args) {
+        try {
+            launch(args);
+        } catch (Exception e) {
+            log.error("Unknown error: " + e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
+        }
     }
 }
 
