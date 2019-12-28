@@ -3,6 +3,8 @@ package controllers;
 import database.model.Experiment;
 import database.model.Status;
 import database.repository.ExperimentRepository;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -149,6 +151,61 @@ public class ExperimentEditionWindowController {
     private MainWindowController mainWindowController;
     private Experiment experiment;
     private Map<String, String> parametersWithoutFieldsMap = new HashMap<>();
+
+    @FXML
+    void initialize() {
+        addListenerWithNumberValidation(experimentNumberOfTreesTextField);
+        addListenerWithNumberValidation(experimentMapSizeTextField);
+        addListenerWithNumberValidation(experimentMapSizeTreeOneTextField);
+        addListenerWithNumberValidation(experimentMapSizeTreeTwoTextField);
+        addListenerWithNumberValidation(experimentMapSizeTreeThreeTextField);
+        addListenerWithNumberValidation(experimentDimensionTextField);
+        addListenerWithNumberValidation(experimentMRIMethodTextField);
+        addListenerWithNumberValidation(experimentMRIDimensionTextField);
+        addListenerWithNumberValidation(experimentTRTextField);
+        addListenerWithNumberValidation(experimentTETextField);
+        addListenerWithNumberValidation(experimentACQTimeTextField);
+        addListenerWithNumberValidation(experimentFATextField);
+        addListenerWithNumberValidation(experimentKindOfRfPulseTextField);
+        addListenerWithNumberValidation(experimentRfPulseTimeTextField);
+        addListenerWithNumberValidation(experimentRRfPulseNOfLobesTextField);
+        addListenerWithNumberValidation(experimentRfPulseBwTextField);
+        addListenerWithNumberValidation(experimentRfPulsePointsTextField);
+        addListenerWithNumberValidation(experimentRfSliceSelAxisTextField);
+        addListenerWithNumberValidation(experimentRfSliceSelThicknessTextField);
+        addListenerWithNumberValidation(experimentRfSliceSelFractionTextField);
+        addListenerWithNumberValidation(experimentRfSliceSelGradientTextField);
+        addListenerWithNumberValidation(experimentChangeRfPulseFlowStepTextField);
+        addListenerWithNumberValidation(experimentRfPulseFlowStepFactorTextField);
+        addListenerWithNumberValidation(experimentChangeBeforeACQFlowStepTextField);
+        addListenerWithNumberValidation(experimentBeforeACQFlowStepFactorTextField);
+        addListenerWithNumberValidation(experimentChangeAfterACQFlowStepTextField);
+        addListenerWithNumberValidation(experimentAfterACQFlowStepFactorTextField);
+        addListenerWithNumberValidation(experimentMRIFlowGmnXTextField);
+        addListenerWithNumberValidation(experimentMRIFlowGmnYTextField);
+        addListenerWithNumberValidation(experimentMRIFlowGmnZTextField);
+        addListenerWithNumberValidation(experimentMRIFlowGmnSliceSelTextField);
+    }
+
+    private void addListenerWithNumberValidation(TextField textField) {
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("^\\d*\\.?\\d*$")) {
+                    String[] split = textField.getText().split("\\.");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(split[0].replaceAll("[^\\d]", ""));
+                    if (split.length > 1) {
+                        stringBuilder.append(".");
+                        for (int i = 1; i < split.length; i++) {
+                            stringBuilder.append(split[i].replaceAll("[^\\d]", ""));
+                        }
+                    }
+                    textField.setText(stringBuilder.toString());
+                }
+            }
+        });
+    }
 
     public void init() {
         readFileWithOptions(null);

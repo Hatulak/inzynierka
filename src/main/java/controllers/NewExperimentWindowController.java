@@ -5,10 +5,7 @@ import database.model.Status;
 import database.repository.ExperimentRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,6 +25,8 @@ import java.util.*;
 public class NewExperimentWindowController {
 
 
+    @FXML
+    private ResourceBundle resources;
 
     @FXML
     public Label descFileLabel;
@@ -129,14 +128,68 @@ public class NewExperimentWindowController {
     private File readedMriObjectFileFlow;
     private File readedMriObjectFileType;
 
+    @FXML
+    void initialize() {
+        addListenerWithNumberValidation(newExperimentNumberOfTreesTextField);
+        addListenerWithNumberValidation(newExperimentMapSizeTextField);
+        addListenerWithNumberValidation(newExperimentMapSizeTreeOneTextField);
+        addListenerWithNumberValidation(newExperimentMapSizeTreeTwoTextField);
+        addListenerWithNumberValidation(newExperimentMapSizeTreeThreeTextField);
+        addListenerWithNumberValidation(newExperimentDimensionTextField);
+        addListenerWithNumberValidation(newExperimentMRIObjectTextField);
+        addListenerWithNumberValidation(newExperimentMRIMethodTextField);
+        addListenerWithNumberValidation(newExperimentMRIDimensionTextField);
+        addListenerWithNumberValidation(newExperimentTRTextField);
+        addListenerWithNumberValidation(newExperimentTETextField);
+        addListenerWithNumberValidation(newExperimentACQTimeTextField);
+        addListenerWithNumberValidation(newExperimentFATextField);
+        addListenerWithNumberValidation(newExperimentKindOfRfPulseTextField);
+        addListenerWithNumberValidation(newExperimentRfPulseTimeTextField);
+        addListenerWithNumberValidation(newExperimentRRfPulseNOfLobesTextField);
+        addListenerWithNumberValidation(newExperimentRfPulseBwTextField);
+        addListenerWithNumberValidation(newExperimentRfPulsePointsTextField);
+        addListenerWithNumberValidation(newExperimentRfSliceSelAxisTextField);
+        addListenerWithNumberValidation(newExperimentRfSliceSelThicknessTextField);
+        addListenerWithNumberValidation(newExperimentRfSliceSelFractionTextField);
+        addListenerWithNumberValidation(newExperimentRfSliceSelGradientTextField);
+        addListenerWithNumberValidation(newExperimentChangeRfPulseFlowStepTextField);
+        addListenerWithNumberValidation(newExperimentRfPulseFlowStepFactorTextField);
+        addListenerWithNumberValidation(newExperimentChangeBeforeACQFlowStepTextField);
+        addListenerWithNumberValidation(newExperimentBeforeACQFlowStepFactorTextField);
+        addListenerWithNumberValidation(newExperimentChangeAfterACQFlowStepTextField);
+        addListenerWithNumberValidation(newExperimentAfterACQFlowStepFactorTextField);
+        addListenerWithNumberValidation(newExperimentMRIFlowGmnXTextField);
+        addListenerWithNumberValidation(newExperimentMRIFlowGmnYTextField);
+        addListenerWithNumberValidation(newExperimentMRIFlowGmnZTextField);
+        addListenerWithNumberValidation(newExperimentMRIFlowGmnSliceSelTextField);
+    }
+
+    private void addListenerWithNumberValidation(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("^\\d*\\.?\\d*$")) {
+                String[] split = textField.getText().split("\\.");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(split[0].replaceAll("[^\\d]", ""));
+                if (split.length > 1) {
+                    stringBuilder.append(".");
+                    for (int i = 1; i < split.length; i++) {
+                        stringBuilder.append(split[i].replaceAll("[^\\d]", ""));
+                    }
+                }
+                textField.setText(stringBuilder.toString());
+            }
+        });
+    }
 
     @FXML
     public void loadMRIObjectFileDesc(ActionEvent actionEvent) {
         ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
         readedMriObjectFileDesc = fileChooser.showOpenDialog(null);
-        if (!readedMriObjectFileDesc.exists()) {
+        if (readedMriObjectFileDesc == null || !readedMriObjectFileDesc.exists()) {
             descFileLabel.setText(messages.getString("desc.file.label.error"));
             descFileLabel.setTextFill(Color.RED);
         } else {
@@ -149,9 +202,11 @@ public class NewExperimentWindowController {
     public void loadMRIObjectFileFlow(ActionEvent actionEvent) {
         ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
         readedMriObjectFileFlow = fileChooser.showOpenDialog(null);
-        if (!readedMriObjectFileFlow.exists()) {
+        if (readedMriObjectFileFlow == null || !readedMriObjectFileFlow.exists()) {
             flowFileLabel.setText(messages.getString("desc.file.label.error"));
             flowFileLabel.setTextFill(Color.RED);
         } else {
@@ -164,9 +219,11 @@ public class NewExperimentWindowController {
     public void loadMRIObjectFileType(ActionEvent actionEvent) {
         ResourceBundle messages = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle(messages.getString("new.experiment.mri.simulation.object.file.open.title"));
         readedMriObjectFileType = fileChooser.showOpenDialog(null);
-        if (!readedMriObjectFileType.exists()) {
+        if (readedMriObjectFileType == null || !readedMriObjectFileType.exists()) {
             typeFileLabel.setText(messages.getString("desc.file.label.error"));
             typeFileLabel.setTextFill(Color.RED);
         } else {
@@ -200,6 +257,8 @@ public class NewExperimentWindowController {
     void readFileWithOptions(ActionEvent event) {
         ResourceBundle messagesBundle = ResourceBundle.getBundle("bundles.messages");
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setTitle(messagesBundle.getString("new.experiment.load.file.with.options"));
         fileWithOptions = fileChooser.showOpenDialog(null);
         try {
@@ -249,6 +308,13 @@ public class NewExperimentWindowController {
             ExperimentRepository.merge(savedExperiment);
             mainWindowController.addExperimentToExperimentsList(savedExperiment);
             closeWindow();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(resources.getString("new.experiment.warning.dialog.title"));
+            alert.setHeaderText(resources.getString("new.experiment.warning.dialog.header"));
+//            alert.setContentText();
+
+            alert.showAndWait();
         }
     }
 
@@ -333,7 +399,13 @@ public class NewExperimentWindowController {
     }
 
     private boolean validateFields() {
+        if (newExperimentNameTextField.getText().isEmpty()) return false;
+
+        if (readedMriObjectFileDesc == null) return false;
+        if (readedMriObjectFileFlow == null) return false;
+        if (readedMriObjectFileType == null) return false;
         //todo - walidacja elemwentów
+
         return true;
     }
 

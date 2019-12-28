@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 @Slf4j
@@ -14,7 +15,7 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws Exception {
 //        Zmiana lokalizacji dla testu
-//        Locale.setDefault(new Locale("en"));
+        Locale.setDefault(new Locale("en"));
         ResourceBundle resourceBundle = ResourceBundle.getBundle("bundles.messages");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"), resourceBundle);
         Parent root = loader.load();

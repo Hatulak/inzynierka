@@ -72,7 +72,7 @@ public class MainWindowController {
 
     private ObservableList<ExperimentTableRow> experimentsObservableList = FXCollections.observableArrayList();
 
-    private ThreadPoolExecutor executorService;
+    private ThreadPoolExecutor threadPoolExecutor;
     private Map<Long, Future> submittedTasks = new HashMap<>();
 
     @FXML
@@ -182,7 +182,10 @@ public class MainWindowController {
         };
         tableColumnExperimentResults.setCellFactory(resultsCellFactory);
 
-        executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() - 1, Runtime.getRuntime().availableProcessors() - 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+        if (Runtime.getRuntime().availableProcessors() == 1)
+            threadPoolExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+        else
+            threadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() - 1, Runtime.getRuntime().availableProcessors() - 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
         initializeExperimentsList();
         tableExperiments.setItems(experimentsObservableList);
@@ -266,7 +269,7 @@ public class MainWindowController {
         ExperimentRepository.merge(experiment);
         refeshExperimentList();
 
-        Future<?> submit = executorService.submit(new ExperimentRunnable(experiment, this));
+        Future<?> submit = threadPoolExecutor.submit(new ExperimentRunnable(experiment, this));
         putSubmittedTask(experiment.getId(), submit);
     }
 
@@ -339,7 +342,7 @@ public class MainWindowController {
 
     public void shutdown() {
         List<Runnable> queueList = new LinkedList<>();
-        executorService.getQueue().drainTo(queueList);
+        threadPoolExecutor.getQueue().drainTo(queueList);
         experimentsObservableList.forEach(tr -> {
             if (tr.getStatus().matches(String.valueOf(Status.IN_QUEUE))) {
                 Experiment byId = ExperimentRepository.findById(tr.getId());
@@ -347,7 +350,7 @@ public class MainWindowController {
                 ExperimentRepository.merge(byId);
             }
         });
-        executorService.shutdownNow();
+        threadPoolExecutor.shutdownNow();
     }
 }
 
