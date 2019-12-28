@@ -193,14 +193,16 @@ public class MainWindowController {
     }
 
     private void cancelExperiment(Experiment experiment) {
-        Future future = getSubmittedTask(experiment.getId());
-        if (future != null)
-            if (future.isDone() || future.isCancelled()) {
-                removeSubmittedTask(experiment.getId());
-                return;
-            } else System.out.println("???");
-        getSubmittedTask(experiment.getId()).cancel(true); //fixme - tutaj cos wywala
-        removeSubmittedTask(experiment.getId());
+        synchronized (this) {
+            Future future = getSubmittedTask(experiment.getId());
+            if (future != null)
+                if (future.isDone() || future.isCancelled()) {
+                    removeSubmittedTask(experiment.getId());
+                } else {
+                    getSubmittedTask(experiment.getId()).cancel(true);
+                    removeSubmittedTask(experiment.getId());
+                }
+        }
     }
 
     private void deleteExperiment(Experiment experiment) {
