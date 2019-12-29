@@ -8,6 +8,7 @@ import database.repository.ExperimentRepository;
 import database.repository.ResultRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -187,8 +188,15 @@ public class MainWindowController {
         else
             threadPoolExecutor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() - 1, Runtime.getRuntime().availableProcessors() - 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
+        SortedList<ExperimentTableRow> sortedList = new SortedList<>(experimentsObservableList);
+        sortedList.comparatorProperty().bind(tableExperiments.comparatorProperty());
+
+        tableExperiments.setItems(sortedList);
+
+        tableExperiments.getSortOrder().addAll(tableColumnExperimentId);
+
         initializeExperimentsList();
-        tableExperiments.setItems(experimentsObservableList);
+//        tableExperiments.setItems(experimentsObservableList);
 
     }
 
@@ -312,6 +320,10 @@ public class MainWindowController {
     private void initializeExperimentsList() {
         List<ExperimentTableRow> list = new LinkedList<>();
         ExperimentRepository.getAll().forEach(e -> {
+            if (e.getStatus().toString().matches(Status.RUNNING.toString()) || e.getStatus().toString().matches(Status.IN_QUEUE.toString())) {
+                e.setStatus(Status.CANCELLED);
+                ExperimentRepository.merge(e);
+            }
             list.add(new ExperimentTableRow(e.getId(), e.getName(), e.getStatus().toString(), "", e.getCreationDate()));
         });
         experimentsObservableList.addAll(list);
